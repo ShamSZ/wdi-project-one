@@ -1,0 +1,77 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 210px;
+  height: 420px;
+  justify-content: center;
+  align-items: center;
+  margin: -75px auto;
+  transform: perspective(95px) rotateX(15deg);
+}
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: black;
+  height: 96vh;
+  width: 98vw;
+}
+
+#myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    transform: rotate(90deg);
+}
+@font-face {
+  font-family: 'Montalban-bold-italic';
+  src: url('fonts/pixel-sagas_montalban/Montalban Bold Italic.otf');
+}
+
+main {
+  height: 80%;
+  width: 80%;
+  margin: -80px auto 0 auto;
+}
+section.info, section.controls {
+  margin: 0 auto;
+  height: 5%;
+  width: 85%;
+  color: lightblue;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+  font-family: 'Montalban-bold-italic', Helvetica, monospace;
+}
+.grid div {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+div.car {
+  background-color: grey;
+  border: solid white 0.5px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+div.obstacle {
+  background-color: white;
+  border: solid white 0.5px;
+  border-radius: 10px;
+}
+
+.controls div {
+  background-color: grey;
+  width: 100px;
+  height: 30px;
+  border: solid red 1px;
+  margin: 0 6px;
+}
+.controls {
+  margin-top: 10px;
+  text-align: center;
+}
