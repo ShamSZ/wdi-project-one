@@ -7,17 +7,34 @@
   align-items: center;
   margin: -75px auto;
   transform: perspective(95px) rotateX(15deg);
+  background-color: yellow;
 }
 body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: black;
+  /* background-color: #000938; */
   height: 96vh;
   width: 98vw;
+  font-family: 'Montalban-bold-italic', Helvetica, monospace;
+  color: Mediumspringgreen;
 }
 
-#myVideo {
+.splash-menu, .splash-leaders {
+  border: solid Mediumspringgreen 1px;
+  text-align: center;
+  background-color: #000938;
+  position: fixed;
+  z-index: 12;
+  width: 500px;
+  height: 300px;
+  left: 25%;
+  top: 25%;
+}
+.splash-leaders li {
+  text-align: justify;
+}
+#background {
     position: fixed;
     right: 0;
     bottom: 0;
@@ -39,12 +56,10 @@ section.info, section.controls {
   margin: 0 auto;
   height: 5%;
   width: 85%;
-  color: lightblue;
   text-align: center;
   display: flex;
   justify-content: space-between;
   z-index: 10;
-  font-family: 'Montalban-bold-italic', Helvetica, monospace;
 }
 .grid div {
   width: 20px;
@@ -58,17 +73,17 @@ div.car {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
-div.obstacle {
+div.debris {
   background-color: white;
   border: solid white 0.5px;
   border-radius: 10px;
 }
 
 .controls div {
-  background-color: grey;
-  width: 100px;
+  background-color: #000938;
+  width: 175px;
   height: 30px;
-  border: solid red 1px;
+  border: solid Mediumspringgreen 1px;
   margin: 0 6px;
 }
 .controls {
