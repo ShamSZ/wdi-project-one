@@ -11,9 +11,37 @@ const leaderboard = document.querySelector('.leaderboard');
 createGrid();
 toggleElement(splashLeaders);
 
-let shuttlePos = 194;
-let shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
-shuttle1.classList.add('shuttle');
+let spacecraftPos = 194;
+let spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+spacecraft.classList.add('spacecraft');
+//NOTE: EXTRA
+// const arrayOfSpaceshipImgClasses = ['spacecraft1', 'spacecraft2', 'spacecraft3', 'spacecraft4'];
+//
+// const spacecraft1 = {
+//   name: 'Wraith',
+//   hitpoints: 300,
+//   imgClass: 'spacecraft1',
+//   weapon: 'photonTorpedoes'
+// };
+// const spacecraft2 = {
+//   name: 'Blade',
+//   hitpoints: 200,
+//   imgClass: 'spacecraft2',
+//   weapon: 'laserPulse'
+// };
+// const spacecraft3 = {
+//   name: 'Valkyrie',
+//   hitpoints: 400,
+//   imgClass: 'spacecraft3',
+//   weapon: 'ionCannon'
+// };
+// const spacecraft4 = {
+//   name: 'Vortex',
+//   hitpoints: 300,
+//   imgClass: 'spacecraft4',
+//   weapon: 'plasmaGun'
+// };
+
 
 // //redunadnt left/right click buttons to be removed before final game deployment
 // const controls = document.querySelector('.controls');
@@ -32,8 +60,11 @@ let debrisPos2 = 0;
 let debris1;
 let debris2;
 let incomingObjects1 = false;
-let debrisSlowness = 340;
+let debrisSlowness = 310;
 let fallingDown;
+const arrayOfDebrisImgClass = ['debris1', 'debris2', 'debris3'];
+let debrisClass1;
+let debrisClass2;
 
 //bonus data
 let bonusPos;
@@ -50,6 +81,7 @@ let gameIsRunning = false;
 let playerName;
 let leaders = [];
 
+//all keyboard presses
 window.addEventListener('keydown', function(e) {
   if (e.which === 38) {
     moveUp();
@@ -81,6 +113,9 @@ function promptPlayerName(){
 function addPlayerToHoF(playerName, score){
   class Player{
     constructor(name, highScore){
+      if (playerName === null){
+        playerName = 'Anonymous Star Lord';
+      }
       this.name = playerName;
       this.highScore = score;
       console.log(`${name} has scored ${highScore}`);
@@ -104,6 +139,7 @@ function addPlayerToHoF(playerName, score){
 function incrementSpeed(){
   speedIncrease = setInterval(function() {
     debrisSlowness = debrisSlowness - 30;
+    console.log(debrisSlowness);
     warpSpeed = warpSpeed + 1;
     warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
     console.log('Increasing warp speed...', warpSpeed);
@@ -120,11 +156,11 @@ function resetGame(){
   scoreCounter.textContent = 'Score: 000';
   warpSpeed = 1;
   warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
-  debrisSlowness = 340;
-  shuttle1.classList.remove('shuttle');
-  shuttlePos = 194;
-  shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
-  shuttle1.classList.add('shuttle');
+  debrisSlowness = 310;
+  spacecraft.classList.remove('spacecraft');
+  spacecraftPos = 194;
+  spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+  spacecraft.classList.add('spacecraft');
 }
 
 function startGame() {
@@ -136,13 +172,13 @@ function startGame() {
     if (incomingObjects1 === false) {
       generateDebris();
       incrementScoreBy(1000);
-      // document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
-    } else if (shuttle1.classList.contains('debris')) {
+      document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
+    } else if (spacecraft.classList.contains('debris')) {
       console.log('Game Over! You have crashed.');
       stopGame();
       takeHighScore();
     }
-    if (shuttle1.classList.contains('bonus')){
+    if (spacecraft.classList.contains('bonus')){
       bonus.classList.remove('bonus');
       isBonusAvailable = false;
       incrementScoreBy(Math.floor(Math.random() * 10000));
@@ -193,16 +229,16 @@ function createGrid(){
 }
 
 function moveLeft(){
-  if(shuttlePos % 10 !== 0){
-    shuttle1.classList.remove('shuttle');
-    shuttlePos--;
-    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
-    shuttle1.classList.add('shuttle');
-    //NOTE when shuttle1 is moved before timeout time can remove tilt class - the 'cell' remains tilted
-    shuttle1.classList.add('tilt-left');
+  if(spacecraftPos % 10 !== 0){
+    spacecraft.classList.remove('spacecraft');
+    spacecraftPos--;
+    spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+    spacecraft.classList.add('spacecraft');
+    //NOTE when spacecraft is moved before timeout time can remove tilt class - the 'cell' remains tilted
+    spacecraft.classList.add('tilt-left');
     setTimeout(function () {
-      shuttle1.classList.remove('tilt-left');
-    }, 50);
+      spacecraft.classList.remove('tilt-left');
+    }, 300);
   } else {
     grid.classList.add('grid-border-left');
     setTimeout(function () {
@@ -212,16 +248,16 @@ function moveLeft(){
 }
 
 function moveRight(){
-  if(shuttlePos.toString().split('').pop() !== '9'){
-    shuttle1.classList.remove('shuttle');
-    shuttlePos++;
-    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
-    shuttle1.classList.add('shuttle');
-    //NOTE when shuttle1 is moved before timeout time can remove tilt class - the 'cell' remains tilted
-    // shuttle1.classList.add('tilt-right');
-    // setTimeout(function () {
-    //   shuttle1.classList.remove('tilt-right');
-    // }, 50);
+  if(spacecraftPos.toString().split('').pop() !== '9'){
+    spacecraft.classList.remove('spacecraft');
+    spacecraftPos++;
+    spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+    spacecraft.classList.add('spacecraft');
+    //NOTE when spacecraft is moved before timeout time can remove tilt class - the 'cell' remains tilted
+    spacecraft.classList.add('tilt-right');
+    setTimeout(function () {
+      spacecraft.classList.remove('tilt-right');
+    }, 300);
   } else {
     grid.classList.add('grid-border-right');
     setTimeout(function () {
@@ -231,51 +267,53 @@ function moveRight(){
 }
 
 function moveUp(){
-  if(shuttlePos > 9){
-    shuttle1.classList.remove('shuttle');
-    shuttlePos = shuttlePos - 10;
-    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
-    shuttle1.classList.add('shuttle');
+  if(spacecraftPos > 9){
+    spacecraft.classList.remove('spacecraft');
+    spacecraftPos = spacecraftPos - 10;
+    spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+    spacecraft.classList.add('spacecraft');
   } else {
     console.log('too far up!!');
   }
 }
 
 function moveDown(){
-  if(shuttlePos < 190){
-    shuttle1.classList.remove('shuttle');
-    shuttlePos = shuttlePos + 10;
-    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
-    shuttle1.classList.add('shuttle');
+  if(spacecraftPos < 190){
+    spacecraft.classList.remove('spacecraft');
+    spacecraftPos = spacecraftPos + 10;
+    spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+    spacecraft.classList.add('spacecraft');
   } else {
     console.log('too far down!!');
   }
 }
 
 function generateDebris() {
-  if (shuttle1.classList.contains('debris') === false){
+  if (spacecraft.classList.contains('debris') === false){
+    debrisClass1 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
+    debrisClass2 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
     incomingObjects1 = true;
     debrisPos1 = (Math.floor(Math.random() * 9));
     debrisPos2 = debrisPos1 + Math.floor(Math.random()*19);
     debris1 = document.querySelectorAll('.grid div')[debrisPos1];
     debris2 = document.querySelectorAll('.grid div')[debrisPos2];
-    debris1.classList.add('debris');
-    debris2.classList.add('debris');
+    debris1.classList.add('debris', debrisClass1);
+    debris2.classList.add('debris', debrisClass2);
     fallingDown = setInterval(function(){
       if (debrisPos2 < 200 && debrisPos2.toString().slice(0,2) !== '19'){
         debrisPos1 = debrisPos1+10;
         debrisPos2 = debrisPos2+10;
-        debris1.classList.remove('debris');
-        debris2.classList.remove('debris');
+        debris1.classList.remove('debris', debrisClass1);
+        debris2.classList.remove('debris', debrisClass2);
         debris1 = document.querySelectorAll('.grid div')[debrisPos1];
         debris2 = document.querySelectorAll('.grid div')[debrisPos2];
-        debris1.classList.add('debris');
-        debris2.classList.add('debris');
+        debris1.classList.add('debris', debrisClass1);
+        debris2.classList.add('debris', debrisClass2);
       } else {
         incomingObjects1 = false;
         clearInterval(fallingDown);
-        debris1.classList.remove('debris');
-        debris2.classList.remove('debris');
+        debris1.classList.remove('debris', debrisClass1);
+        debris2.classList.remove('debris', debrisClass2);
       }
     }, debrisSlowness);
   }
@@ -287,8 +325,10 @@ function removeBonus(){
 }
 
 function removeAllDebris(){
-  console.log('testing clear debris');
   document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris'));
+  document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris1'));
+  document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris2'));
+  document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris3'));
 }
 
 function generateBonus(){

@@ -67,8 +67,8 @@ main {
   top: 25%;
 }
 
-.splash-leaders li {
-  text-align: justify;
+.splash-leaders ol {
+  text-align: center;
 }
 
 section.info, section.controls {
@@ -96,21 +96,44 @@ span {
   /* border-right: solid Mediumspringgreen 0.1px; */
 }
 
-div.shuttle {
+div.spacecraft {
   background-image: url(images/spaceship1.png);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background-size: cover;
   transform: perspective(95px) rotateX(15deg);
 }
-div.debris1{
-/* image only   */
+
+div.spacecraft1 {
+  background-image: url(images/spacecraft1.png);
+}
+
+div.spacecraft2 {
+  background-image: url(images/spacecraft2.png);
+}
+
+div.spacecraft3 {
+  background-image: url(images/spacecraft3.png);
+}
+
+div.spacecraft4 {
+  background-image: url(images/spacecraft4.png);
 }
 
 div.debris {
-  background-image: url(images/debris6.png);
   background-size: cover;
   transform: perspective(95px) rotateX(15deg);
+}
+div.debris1 {
+  background-image: url(images/debris1.png);
+}
+
+div.debris2 {
+  background-image: url(images/debris2.png);
+}
+
+div.debris3 {
+  background-image: url(images/debris3.png);
 }
 
 div.bonus {
