@@ -4,26 +4,27 @@ const grid = document.querySelector('.grid');
 const controls = document.querySelector('.controls');
 const leftButton = document.createElement('div');
 const rightButton = document.createElement('div');
-controls.appendChild(leftButton).setAttribute('id', 'left');
-controls.appendChild(rightButton).setAttribute('id', 'right');
-leftButton.textContent = '<<< Portside';
-rightButton.textContent = 'Starboard >>>';
 const scoreCounter = document.querySelector('.score');
 const warpMeter = document.querySelector('.warpspeed');
-// const video = document.querySelector('#background');
+const video = document.querySelector('#background');
 const splashMenu = document.querySelector('.splash-menu');
 const splashLeaders = document.querySelector('.splash-leaders');
 const leaderboard = document.querySelector('.leaderboard');
+video.pause();
 createGrid();
+toggleElement(splashLeaders);
 
 let carPos = 194;
 let car1 = document.querySelectorAll('.grid div')[carPos];
 car1.classList.add('car');
+
+//redunadnt left/right click buttons to be removed before final game deployment
+controls.appendChild(leftButton).setAttribute('id', 'left');
+controls.appendChild(rightButton).setAttribute('id', 'right');
+leftButton.textContent = '<<< Portside';
+rightButton.textContent = 'Starboard >>>';
 leftButton.addEventListener('click', moveLeft);
 rightButton.addEventListener('click', moveRight);
-
-
-
 
 //debris data
 let debrisPos1 = 0;
@@ -32,6 +33,12 @@ let debris1;
 let debris2;
 let incomingObjects1 = false;
 let debrisSlowness = 340;
+
+//bonus data
+let bonusPos;
+let isBonusAvailable = false;
+let bonus;
+let introduceBonus;
 
 //game progress data
 let score = 0;
@@ -42,16 +49,6 @@ let gameIsRunning = false;
 let playerName;
 const leaders = [];
 
-toggleElement(splashLeaders);
-
-function toggleElement(element) {
-  if (element.style.display === 'none') {
-    element.style.display = 'block';
-  } else {
-    element.style.display = 'none';
-  }
-}
-
 window.addEventListener('keydown', function(e) {
   if (e.which === 38) {
     moveUp();
@@ -61,15 +58,16 @@ window.addEventListener('keydown', function(e) {
     moveLeft();
   } else if (e.which === 39) {
     moveRight();
-  } else if (e.which === 32) {
+  } else if (e.which === 32) { //spacebar
     if(gameIsRunning === false){
       startGame();
       toggleElement(splashMenu);
     } else {
       console.log('Charging photon torpedoes!'); //add shooting function here
     }
-  } else if (e.which === 27) {
-    console.log('reset scores and take me to the main menu!');
+  } else if (e.which === 27) { //escape key
+    console.log('Reset scores and take me to the main menu!');
+    resetGame();
     toggleElement(splashLeaders);
     toggleElement(splashMenu);
   }
@@ -94,7 +92,7 @@ function addPlayerToHoF(playerName, score){
   leaders.sort(compare);
   leaders.forEach(function(element){
     const newElement = document.createElement('li');
-    newElement.textContent = `${element.highScore} - ${element.name}`;
+    newElement.textContent = `${element.highScore} >>> ${element.name}`;
     leaderboard.appendChild(newElement);
   });
 }
@@ -110,7 +108,61 @@ function incrementSpeed(){
       console.log('Warp speed 10 achieved!', warpSpeed);
       clearInterval(speedIncrease);
     }
-  }, 10000 );
+  }, 5000 );
+}
+
+function resetGame(){
+  score = 0;
+  scoreCounter.textContent = 'Score: 000';
+  warpSpeed = 1;
+  warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
+  debrisSlowness = 340;
+  car1.classList.remove('car');
+  carPos = 194;
+  car1 = document.querySelectorAll('.grid div')[carPos];
+  car1.classList.add('car');
+  clearInterval(incrementSpeed);
+  clearInterval(isUserAlive);
+  clearInterval(introduceBonus);
+  removeBonus();
+  removeAllDebris();
+}
+
+function startGame() {
+  video.play();
+  gameIsRunning = true;
+  generateDebris();
+  isUserAlive = setInterval(function() {
+    if (incomingObjects1 === false) {
+      generateDebris();
+      incrementScoreBy(1000);
+      startGeneratingBonus();
+    } else if (car1.classList.contains('debris')) {
+      console.log('Game Over! You have crashed.');
+      video.pause();
+      clearInterval(isUserAlive);
+      clearInterval(incrementSpeed);
+      gameIsRunning = false;
+      promptPlayerName();
+      toggleElement(splashLeaders);
+      leaderboard.innerHtml = '';
+      addPlayerToHoF(playerName, score);
+    }
+    if (car1.classList.contains('bonus')){
+      bonus.classList.remove('bonus');
+      isBonusAvailable = false;
+      incrementScoreBy(Math.floor(Math.random() * 10000));
+    }
+  }, 1);
+  incrementSpeed();
+}
+
+function toggleElement(element) {
+  if (element.style.display === 'none') {
+    element.style.display = 'block';
+  } else {
+    element.style.display = 'none';
+  }
 }
 
 function compare(a,b) {
@@ -128,43 +180,21 @@ function createGrid(){
   }
 }
 
-// NOTE:  reset car to starting point
-function startGame() {
-  score = 0;
-  scoreCounter.textContent = 'Score: 000';
-  warpSpeed = 1;
-  warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
-  debrisSlowness = 340;
-  gameIsRunning = true;
-  generatedebris();
-  isUserAlive = setInterval(function() {
-    if (incomingObjects1 === false) {
-      generatedebris();
-      score = score + 100;
-      scoreCounter.textContent = `Score: ${score}`;
-    } else if (car1.classList.contains('debris')) {
-      console.log('Game Over! You have crashed.');
-      // video.pause();
-      clearInterval(isUserAlive);
-      clearInterval(incrementSpeed);
-      gameIsRunning = false;
-      promptPlayerName();
-      toggleElement(splashLeaders);
-      leaderboard.innerHtml = '';
-      addPlayerToHoF(playerName, score);
-    }
-  }, 1);
-  incrementSpeed();
-}
-
 function moveLeft(){
   if(carPos % 10 !== 0){
     car1.classList.remove('car');
     carPos--;
     car1 = document.querySelectorAll('.grid div')[carPos];
     car1.classList.add('car');
+    car1.classList.add('tilt-left');
+    setTimeout(function () {
+      car1.classList.remove('tilt-left');
+    }, 100);
   } else {
-    console.log('too far left!!');
+    grid.classList.add('grid-border-left');
+    setTimeout(function () {
+      grid.classList.remove('grid-border-left');
+    }, 300);
   }
 }
 
@@ -174,8 +204,15 @@ function moveRight(){
     carPos++;
     car1 = document.querySelectorAll('.grid div')[carPos];
     car1.classList.add('car');
+    car1.classList.add('tilt-right');
+    setTimeout(function () {
+      car1.classList.remove('tilt-right');
+    }, 100);
   } else {
-    console.log('too far right!!');
+    grid.classList.add('grid-border-right');
+    setTimeout(function () {
+      grid.classList.remove('grid-border-right');
+    }, 300);
   }
 }
 
@@ -201,11 +238,11 @@ function moveDown(){
   }
 }
 
-function generatedebris() {
+function generateDebris() {
   if (car1.classList.contains('debris') === false){
     incomingObjects1 = true;
     debrisPos1 = (Math.floor(Math.random() * 9));
-    debrisPos2 = debrisPos1 + Math.floor(Math.random()*15);
+    debrisPos2 = debrisPos1 + Math.floor(Math.random()*19);
     debris1 = document.querySelectorAll('.grid div')[debrisPos1];
     debris2 = document.querySelectorAll('.grid div')[debrisPos2];
     debris1.classList.add('debris');
@@ -228,6 +265,35 @@ function generatedebris() {
       }
     }, debrisSlowness);
   }
+}
+function removeBonus(){
+  document.querySelectorAll('.grid div').forEach(element => element.classList.remove('bonus'));
+  isBonusAvailable = false;
+}
+function removeAllDebris(){
+  while(document.querySelectorAll('.grid div').forEach(element => element.classList.contains('debris'))){
+    document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris'));
+  }
+}
+function generateBonus(){
+  bonusPos = (Math.floor(Math.random() * 190));
+  bonus = document.querySelectorAll('.grid div')[bonusPos];
+  bonus.classList.add('bonus');
+  isBonusAvailable = true;
+}
+
+function startGeneratingBonus(){
+  introduceBonus = setInterval(function(){
+    if(gameIsRunning){
+      removeBonus();
+      generateBonus();
+    }
+  } , 5000);
+}
+
+function incrementScoreBy(points){
+  score = score + points;
+  scoreCounter.textContent = `Score: ${score}`;
 }
 
 // Second debris - buggy...

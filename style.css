@@ -1,3 +1,25 @@
+@font-face {
+  font-family: 'Montalban-bold-italic';
+  src: url('fonts/pixel-sagas_montalban/Montalban Bold Italic.otf');
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #000938;
+  height: 96vh;
+  width: 98vw;
+  font-family: 'Montalban-bold-italic', Helvetica, monospace;
+  color: Mediumspringgreen;
+}
+
+main {
+  height: 80%;
+  width: 80%;
+  margin: -80px auto 0 auto;
+}
+
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -7,51 +29,49 @@
   align-items: center;
   margin: -75px auto;
   transform: perspective(95px) rotateX(15deg);
-  background-color: yellow;
-}
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   /* background-color: #000938; */
-  height: 96vh;
-  width: 98vw;
-  font-family: 'Montalban-bold-italic', Helvetica, monospace;
-  color: Mediumspringgreen;
+}
+@keyframes glow {
+  0%{border-width: 2px}
+  50%{border-width: 3px;
+    border-color: #00face }
+    100%{border-width: 2px}
+}
+
+.tilt-left {
+  transform: perspective(15px) rotateY(15deg);
+}
+
+.tilt-right {
+  transform: perspective(15px) rotateY(-15deg);
+}
+
+.grid-border-left{
+  border-left: solid Mediumspringgreen 2px;
+  animation: glow 0.3s infinite;
+}
+
+.grid-border-right{
+  border-right: solid Mediumspringgreen 2px;
+  animation: glow 0.3s infinite;
 }
 
 .splash-menu, .splash-leaders {
-  border: solid Mediumspringgreen 1px;
+  border: solid Mediumspringgreen 2px;
   text-align: center;
   background-color: #000938;
   position: fixed;
   z-index: 12;
-  width: 500px;
+  width: 50%;
   height: 300px;
   left: 25%;
   top: 25%;
 }
+
 .splash-leaders li {
   text-align: justify;
 }
-#background {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    transform: rotate(90deg);
-}
-@font-face {
-  font-family: 'Montalban-bold-italic';
-  src: url('fonts/pixel-sagas_montalban/Montalban Bold Italic.otf');
-}
 
-main {
-  height: 80%;
-  width: 80%;
-  margin: -80px auto 0 auto;
-}
 section.info, section.controls {
   margin: 0 auto;
   height: 5%;
@@ -61,6 +81,13 @@ section.info, section.controls {
   justify-content: space-between;
   z-index: 10;
 }
+
+span {
+  border: solid Mediumspringgreen 1px;
+  width: 250px;
+  font-size: 20px;
+  text-decoration: underline;
+}
 .grid div {
   width: 20px;
   height: 20px;
@@ -68,8 +95,8 @@ section.info, section.controls {
 }
 
 div.car {
-  background-color: grey;
-  border: solid white 0.5px;
+  animation: rainbow 1s infinite;
+  animation-timing-function: linear;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
@@ -79,6 +106,30 @@ div.debris {
   border-radius: 10px;
 }
 
+div.bonus {
+  border: solid white 0.5px;
+  border-radius: 10px;
+  animation: rainbow 1s infinite;
+  animation-timing-function: linear;
+}
+@keyframes rainbow {
+  0%{background-color: #e81d1d}
+  10%{background-color: #e8b71d}
+  20%{background-color: #e3e81d}
+  30%{background-color: #e3e81d}
+  40%{background-color: #1de840}
+  50%{background-color: #1de840}
+  60%{background-color: #1ddde8}
+  70%{background-color: #2b1de8}
+  80%{background-color: #dd00f3}
+  90%{background-color: #dd00f3}
+  100%{background-color: #ff2400}
+}
+.controls {
+  margin-top: 10px;
+  text-align: center;
+}
+
 .controls div {
   background-color: #000938;
   width: 175px;
@@ -86,7 +137,12 @@ div.debris {
   border: solid Mediumspringgreen 1px;
   margin: 0 6px;
 }
-.controls {
-  margin-top: 10px;
-  text-align: center;
+
+#background {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  transform: rotate(90deg);
 }
