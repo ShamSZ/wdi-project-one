@@ -7,7 +7,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #000938;
+  /* background-color: #000938; */
   height: 96vh;
   width: 98vw;
   font-family: 'Montalban-bold-italic', Helvetica, monospace;
@@ -29,7 +29,6 @@ main {
   align-items: center;
   margin: -75px auto;
   transform: perspective(95px) rotateX(15deg);
-  /* background-color: #000938; */
 }
 @keyframes glow {
   0%{border-width: 2px}
@@ -38,11 +37,11 @@ main {
     100%{border-width: 2px}
 }
 
-.tilt-left {
+.grid div.tilt-left {
   transform: perspective(15px) rotateY(15deg);
 }
 
-.tilt-right {
+.grid div.tilt-right {
   transform: perspective(15px) rotateY(-15deg);
 }
 
@@ -92,25 +91,34 @@ span {
   width: 20px;
   height: 20px;
   margin: 0;
+  border: solid Mediumspringgreen 0.5px;
+  /* border-left: solid Mediumspringgreen 0.1px;
+  /* border-right: solid Mediumspringgreen 0.1px; */
 }
 
-div.car {
-  animation: rainbow 1s infinite;
-  animation-timing-function: linear;
+div.shuttle {
+  background-image: url(images/spaceship1.png);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  background-size: cover;
+  transform: perspective(95px) rotateX(15deg);
 }
+div.debris1{
+/* image only   */
+}
+
 div.debris {
-  background-color: white;
-  border: solid white 0.5px;
-  border-radius: 10px;
+  background-image: url(images/debris6.png);
+  background-size: cover;
+  transform: perspective(95px) rotateX(15deg);
 }
 
 div.bonus {
   border: solid white 0.5px;
   border-radius: 10px;
-  animation: rainbow 1s infinite;
+  animation: rainbow 2s infinite;
   animation-timing-function: linear;
+  transform: perspective(95px) rotateX(15deg);
 }
 @keyframes rainbow {
   0%{background-color: #e81d1d}
@@ -136,6 +144,13 @@ div.bonus {
   height: 30px;
   border: solid Mediumspringgreen 1px;
   margin: 0 6px;
+}
+#background-img {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 #background {

@@ -1,30 +1,30 @@
 console.log('Prepare for Warp!');
 
 const grid = document.querySelector('.grid');
-const controls = document.querySelector('.controls');
-const leftButton = document.createElement('div');
-const rightButton = document.createElement('div');
 const scoreCounter = document.querySelector('.score');
 const warpMeter = document.querySelector('.warpspeed');
-const video = document.querySelector('#background');
+// const video = document.querySelector('#background');
 const splashMenu = document.querySelector('.splash-menu');
 const splashLeaders = document.querySelector('.splash-leaders');
 const leaderboard = document.querySelector('.leaderboard');
-video.pause();
+// video.pause();
 createGrid();
 toggleElement(splashLeaders);
 
-let carPos = 194;
-let car1 = document.querySelectorAll('.grid div')[carPos];
-car1.classList.add('car');
+let shuttlePos = 194;
+let shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
+shuttle1.classList.add('shuttle');
 
-//redunadnt left/right click buttons to be removed before final game deployment
-controls.appendChild(leftButton).setAttribute('id', 'left');
-controls.appendChild(rightButton).setAttribute('id', 'right');
-leftButton.textContent = '<<< Portside';
-rightButton.textContent = 'Starboard >>>';
-leftButton.addEventListener('click', moveLeft);
-rightButton.addEventListener('click', moveRight);
+// //redunadnt left/right click buttons to be removed before final game deployment
+// const controls = document.querySelector('.controls');
+// const leftButton = document.createElement('div');
+// const rightButton = document.createElement('div');
+// controls.appendChild(leftButton).setAttribute('id', 'left');
+// controls.appendChild(rightButton).setAttribute('id', 'right');
+// leftButton.textContent = '<<< Portside';
+// rightButton.textContent = 'Starboard >>>';
+// leftButton.addEventListener('click', moveLeft);
+// rightButton.addEventListener('click', moveRight);
 
 //debris data
 let debrisPos1 = 0;
@@ -33,6 +33,7 @@ let debris1;
 let debris2;
 let incomingObjects1 = false;
 let debrisSlowness = 340;
+let fallingDown;
 
 //bonus data
 let bonusPos;
@@ -47,7 +48,7 @@ let isUserAlive;
 let speedIncrease;
 let gameIsRunning = false;
 let playerName;
-const leaders = [];
+let leaders = [];
 
 window.addEventListener('keydown', function(e) {
   if (e.which === 38) {
@@ -85,11 +86,14 @@ function addPlayerToHoF(playerName, score){
       console.log(`${name} has scored ${highScore}`);
     }
   }
+
   while (leaderboard.firstChild) {
     leaderboard.removeChild(leaderboard.firstChild);
   }
+
   leaders.push(new Player(playerName, score));
   leaders.sort(compare);
+  leaders = leaders.slice(0,5);
   leaders.forEach(function(element){
     const newElement = document.createElement('li');
     newElement.textContent = `${element.highScore} >>> ${element.name}`;
@@ -100,11 +104,10 @@ function addPlayerToHoF(playerName, score){
 function incrementSpeed(){
   speedIncrease = setInterval(function() {
     debrisSlowness = debrisSlowness - 30;
-    // debrisSlowness2 = debrisSlowness2 - 30;
     warpSpeed = warpSpeed + 1;
     warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
     console.log('Increasing warp speed...', warpSpeed);
-    if (warpSpeed === 10 || incomingObjects1 === false){
+    if (warpSpeed === 10){
       console.log('Warp speed 10 achieved!', warpSpeed);
       clearInterval(speedIncrease);
     }
@@ -112,49 +115,58 @@ function incrementSpeed(){
 }
 
 function resetGame(){
+  stopGame();
   score = 0;
   scoreCounter.textContent = 'Score: 000';
   warpSpeed = 1;
   warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
   debrisSlowness = 340;
-  car1.classList.remove('car');
-  carPos = 194;
-  car1 = document.querySelectorAll('.grid div')[carPos];
-  car1.classList.add('car');
-  clearInterval(incrementSpeed);
-  clearInterval(isUserAlive);
-  clearInterval(introduceBonus);
-  removeBonus();
-  removeAllDebris();
+  shuttle1.classList.remove('shuttle');
+  shuttlePos = 194;
+  shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
+  shuttle1.classList.add('shuttle');
 }
 
 function startGame() {
-  video.play();
+  // video.play();
   gameIsRunning = true;
   generateDebris();
+  startGeneratingBonus();
   isUserAlive = setInterval(function() {
     if (incomingObjects1 === false) {
       generateDebris();
       incrementScoreBy(1000);
-      startGeneratingBonus();
-    } else if (car1.classList.contains('debris')) {
+      // document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
+    } else if (shuttle1.classList.contains('debris')) {
       console.log('Game Over! You have crashed.');
-      video.pause();
-      clearInterval(isUserAlive);
-      clearInterval(incrementSpeed);
-      gameIsRunning = false;
-      promptPlayerName();
-      toggleElement(splashLeaders);
-      leaderboard.innerHtml = '';
-      addPlayerToHoF(playerName, score);
+      stopGame();
+      takeHighScore();
     }
-    if (car1.classList.contains('bonus')){
+    if (shuttle1.classList.contains('bonus')){
       bonus.classList.remove('bonus');
       isBonusAvailable = false;
       incrementScoreBy(Math.floor(Math.random() * 10000));
     }
   }, 1);
   incrementSpeed();
+}
+
+function stopGame(){
+  // video.pause();
+  clearInterval(isUserAlive);
+  clearInterval(speedIncrease);
+  clearInterval(introduceBonus);
+  clearInterval(fallingDown);
+  removeBonus();
+  removeAllDebris();
+  gameIsRunning = false;
+}
+
+function takeHighScore(){
+  promptPlayerName();
+  toggleElement(splashLeaders);
+  leaderboard.innerHtml = '';
+  addPlayerToHoF(playerName, score);
 }
 
 function toggleElement(element) {
@@ -181,15 +193,16 @@ function createGrid(){
 }
 
 function moveLeft(){
-  if(carPos % 10 !== 0){
-    car1.classList.remove('car');
-    carPos--;
-    car1 = document.querySelectorAll('.grid div')[carPos];
-    car1.classList.add('car');
-    car1.classList.add('tilt-left');
+  if(shuttlePos % 10 !== 0){
+    shuttle1.classList.remove('shuttle');
+    shuttlePos--;
+    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
+    shuttle1.classList.add('shuttle');
+    //NOTE when shuttle1 is moved before timeout time can remove tilt class - the 'cell' remains tilted
+    shuttle1.classList.add('tilt-left');
     setTimeout(function () {
-      car1.classList.remove('tilt-left');
-    }, 100);
+      shuttle1.classList.remove('tilt-left');
+    }, 50);
   } else {
     grid.classList.add('grid-border-left');
     setTimeout(function () {
@@ -199,15 +212,16 @@ function moveLeft(){
 }
 
 function moveRight(){
-  if(carPos.toString().split('').pop() !== '9'){
-    car1.classList.remove('car');
-    carPos++;
-    car1 = document.querySelectorAll('.grid div')[carPos];
-    car1.classList.add('car');
-    car1.classList.add('tilt-right');
-    setTimeout(function () {
-      car1.classList.remove('tilt-right');
-    }, 100);
+  if(shuttlePos.toString().split('').pop() !== '9'){
+    shuttle1.classList.remove('shuttle');
+    shuttlePos++;
+    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
+    shuttle1.classList.add('shuttle');
+    //NOTE when shuttle1 is moved before timeout time can remove tilt class - the 'cell' remains tilted
+    // shuttle1.classList.add('tilt-right');
+    // setTimeout(function () {
+    //   shuttle1.classList.remove('tilt-right');
+    // }, 50);
   } else {
     grid.classList.add('grid-border-right');
     setTimeout(function () {
@@ -217,29 +231,29 @@ function moveRight(){
 }
 
 function moveUp(){
-  if(carPos > 9){
-    car1.classList.remove('car');
-    carPos = carPos - 10;
-    car1 = document.querySelectorAll('.grid div')[carPos];
-    car1.classList.add('car');
+  if(shuttlePos > 9){
+    shuttle1.classList.remove('shuttle');
+    shuttlePos = shuttlePos - 10;
+    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
+    shuttle1.classList.add('shuttle');
   } else {
     console.log('too far up!!');
   }
 }
 
 function moveDown(){
-  if(carPos < 190){
-    car1.classList.remove('car');
-    carPos = carPos + 10;
-    car1 = document.querySelectorAll('.grid div')[carPos];
-    car1.classList.add('car');
+  if(shuttlePos < 190){
+    shuttle1.classList.remove('shuttle');
+    shuttlePos = shuttlePos + 10;
+    shuttle1 = document.querySelectorAll('.grid div')[shuttlePos];
+    shuttle1.classList.add('shuttle');
   } else {
     console.log('too far down!!');
   }
 }
 
 function generateDebris() {
-  if (car1.classList.contains('debris') === false){
+  if (shuttle1.classList.contains('debris') === false){
     incomingObjects1 = true;
     debrisPos1 = (Math.floor(Math.random() * 9));
     debrisPos2 = debrisPos1 + Math.floor(Math.random()*19);
@@ -247,7 +261,7 @@ function generateDebris() {
     debris2 = document.querySelectorAll('.grid div')[debrisPos2];
     debris1.classList.add('debris');
     debris2.classList.add('debris');
-    const fallingDown = setInterval(function(){
+    fallingDown = setInterval(function(){
       if (debrisPos2 < 200 && debrisPos2.toString().slice(0,2) !== '19'){
         debrisPos1 = debrisPos1+10;
         debrisPos2 = debrisPos2+10;
@@ -266,15 +280,17 @@ function generateDebris() {
     }, debrisSlowness);
   }
 }
+
 function removeBonus(){
   document.querySelectorAll('.grid div').forEach(element => element.classList.remove('bonus'));
   isBonusAvailable = false;
 }
+
 function removeAllDebris(){
-  while(document.querySelectorAll('.grid div').forEach(element => element.classList.contains('debris'))){
-    document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris'));
-  }
+  console.log('testing clear debris');
+  document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris'));
 }
+
 function generateBonus(){
   bonusPos = (Math.floor(Math.random() * 190));
   bonus = document.querySelectorAll('.grid div')[bonusPos];
@@ -295,47 +311,3 @@ function incrementScoreBy(points){
   score = score + points;
   scoreCounter.textContent = `Score: ${score}`;
 }
-
-// Second debris - buggy...
-
-// let debrisPos3 = 0;
-// let debrisPos4 = 0;
-// let debris3;
-// let debris4;
-// let incomingObjects2 = false;
-// let debrisSlowness2 = 325;
-
-//inside isUserAlive setInterval
-// if (incomingObjects2 === false) {
-//   generatedebris2();
-// }
-
-// generatedebris2();
-
-// function generatedebris2() {
-//   if (incomingObjects2 === false){
-//     incomingObjects2 === true;
-//     debrisPos3 = (Math.floor(Math.random() * 9));
-//     debrisPos4 = 9 - debrisPos3;
-//     debris3 = document.querySelectorAll('.grid div')[debrisPos3];
-//     debris4 = document.querySelectorAll('.grid div')[debrisPos4];
-//     debris3.classList.add('debris');
-//     debris4.classList.add('debris');
-//     const fallingDown2 = setInterval(function(){
-//       if (debrisPos4 < 200 && debrisPos4.toString().slice(0,2) !== '19'){
-//         debrisPos3 = debrisPos3+10;
-//         debrisPos4 = debrisPos4+10;
-//         debris3.classList.remove('debris');
-//         debris4.classList.remove('debris');
-//         debris3 = document.querySelectorAll('.grid div')[debrisPos3];
-//         debris4 = document.querySelectorAll('.grid div')[debrisPos4];
-//         debris3.classList.add('debris');
-//         debris4.classList.add('debris');
-//       } else {
-//         clearInterval(fallingDown2);
-//         debris3.classList.remove('debris');
-//         debris4.classList.remove('debris');
-//       }
-//     }, debrisSlowness2);
-//   }
-// }
