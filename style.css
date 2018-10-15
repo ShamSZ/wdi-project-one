@@ -38,19 +38,27 @@ main {
 }
 
 .grid div.tilt-left {
-  transform: perspective(15px) rotateY(15deg);
-}
-
-.grid div.tilt-right {
   transform: perspective(15px) rotateY(-15deg);
 }
 
-.grid-border-left{
+.grid div.tilt-right {
+  transform: perspective(15px) rotateY(15deg);
+}
+
+.grid-border-top {
+  border-top: solid Mediumspringgreen 2px;
+  animation: glow 0.3s infinite;
+}
+.grid-border-bottom {
+  border-bottom: solid Mediumspringgreen 2px;
+  animation: glow 0.3s infinite;
+}
+.grid-border-left {
   border-left: solid Mediumspringgreen 2px;
   animation: glow 0.3s infinite;
 }
 
-.grid-border-right{
+.grid-border-right {
   border-right: solid Mediumspringgreen 2px;
   animation: glow 0.3s infinite;
 }
@@ -97,7 +105,7 @@ span {
 }
 
 div.spacecraft {
-  background-image: url(images/spaceship1.png);
+  background-image: url(images/spacecraft2.png);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background-size: cover;

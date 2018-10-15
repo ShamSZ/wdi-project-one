@@ -14,59 +14,23 @@ toggleElement(splashLeaders);
 let spacecraftPos = 194;
 let spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
 spacecraft.classList.add('spacecraft');
-//NOTE: EXTRA
-// const arrayOfSpaceshipImgClasses = ['spacecraft1', 'spacecraft2', 'spacecraft3', 'spacecraft4'];
-//
-// const spacecraft1 = {
-//   name: 'Wraith',
-//   hitpoints: 300,
-//   imgClass: 'spacecraft1',
-//   weapon: 'photonTorpedoes'
-// };
-// const spacecraft2 = {
-//   name: 'Blade',
-//   hitpoints: 200,
-//   imgClass: 'spacecraft2',
-//   weapon: 'laserPulse'
-// };
-// const spacecraft3 = {
-//   name: 'Valkyrie',
-//   hitpoints: 400,
-//   imgClass: 'spacecraft3',
-//   weapon: 'ionCannon'
-// };
-// const spacecraft4 = {
-//   name: 'Vortex',
-//   hitpoints: 300,
-//   imgClass: 'spacecraft4',
-//   weapon: 'plasmaGun'
-// };
 
-
-// //redunadnt left/right click buttons to be removed before final game deployment
-// const controls = document.querySelector('.controls');
-// const leftButton = document.createElement('div');
-// const rightButton = document.createElement('div');
-// controls.appendChild(leftButton).setAttribute('id', 'left');
-// controls.appendChild(rightButton).setAttribute('id', 'right');
-// leftButton.textContent = '<<< Portside';
-// rightButton.textContent = 'Starboard >>>';
-// leftButton.addEventListener('click', moveLeft);
-// rightButton.addEventListener('click', moveRight);
+// NOTE: use toggleElement to show where user is on user path
+// - splashMenu = true; / false;
 
 //debris data
 let debrisPos1 = 0;
 let debrisPos2 = 0;
 let debris1;
 let debris2;
-let incomingObjects1 = false;
+let incomingDebris1 = false;
 let debrisSlowness = 310;
 let fallingDown;
-const arrayOfDebrisImgClass = ['debris1', 'debris2', 'debris3'];
 let debrisClass1;
 let debrisClass2;
+const arrayOfDebrisImgClass = ['debris1', 'debris2', 'debris3'];
 
-//bonus data
+//bonus points data
 let bonusPos;
 let isBonusAvailable = false;
 let bonus;
@@ -81,7 +45,7 @@ let gameIsRunning = false;
 let playerName;
 let leaders = [];
 
-//all keyboard presses
+//all keyboard listeners
 window.addEventListener('keydown', function(e) {
   if (e.which === 38) {
     moveUp();
@@ -169,7 +133,7 @@ function startGame() {
   generateDebris();
   startGeneratingBonus();
   isUserAlive = setInterval(function() {
-    if (incomingObjects1 === false) {
+    if (incomingDebris1 === false) {
       generateDebris();
       incrementScoreBy(1000);
       document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
@@ -273,7 +237,10 @@ function moveUp(){
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
   } else {
-    console.log('too far up!!');
+    grid.classList.add('grid-border-top');
+    setTimeout(function () {
+      grid.classList.remove('grid-border-top');
+    }, 300);
   }
 }
 
@@ -284,7 +251,10 @@ function moveDown(){
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
   } else {
-    console.log('too far down!!');
+    grid.classList.add('grid-border-bottom');
+    setTimeout(function () {
+      grid.classList.remove('grid-border-bottom');
+    }, 300);
   }
 }
 
@@ -292,7 +262,7 @@ function generateDebris() {
   if (spacecraft.classList.contains('debris') === false){
     debrisClass1 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
     debrisClass2 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
-    incomingObjects1 = true;
+    incomingDebris1 = true;
     debrisPos1 = (Math.floor(Math.random() * 9));
     debrisPos2 = debrisPos1 + Math.floor(Math.random()*19);
     debris1 = document.querySelectorAll('.grid div')[debrisPos1];
@@ -310,7 +280,7 @@ function generateDebris() {
         debris1.classList.add('debris', debrisClass1);
         debris2.classList.add('debris', debrisClass2);
       } else {
-        incomingObjects1 = false;
+        incomingDebris1 = false;
         clearInterval(fallingDown);
         debris1.classList.remove('debris', debrisClass1);
         debris2.classList.remove('debris', debrisClass2);
@@ -351,3 +321,54 @@ function incrementScoreBy(points){
   score = score + points;
   scoreCounter.textContent = `Score: ${score}`;
 }
+
+
+
+
+
+//NOTE: EXTRA - background music and sfx
+//NOTE: EXTRA - at warp 10, popup pulsing heading showing max warp factor reached
+//NOTE: EXTRA - add extra ships to choose from with added functionality
+// weapons - shoot projecticles to destroy debris
+// hullIntegrity to survive impact with debris - bonus to restore hullIntegrity
+// NOTE: EXTRA - Player 2 - additional spacecraft
+// NOTE: EXTRA - Boss for joint/solo missions
+
+// const arrayOfSpaceshipImgClasses = ['spacecraft1', 'spacecraft2', 'spacecraft3', 'spacecraft4'];
+//
+// const spacecraft1 = {
+//   name: 'Wraith',
+//   hullIntegrity: 300,
+//   imgClass: 'spacecraft1',
+//   weapon: 'photonTorpedoes'
+// };
+// const spacecraft2 = {
+//   name: 'Blade',
+//   hullIntegrity: 200,
+//   imgClass: 'spacecraft2',
+//   weapon: 'laserPulse'
+// };
+// const spacecraft3 = {
+//   name: 'Valkyrie',
+//   hullIntegrity: 400,
+//   imgClass: 'spacecraft3',
+//   weapon: 'ionCannon'
+// };
+// const spacecraft4 = {
+//   name: 'Vortex',
+//   hullIntegrity: 300,
+//   imgClass: 'spacecraft4',
+//   weapon: 'plasmaGun'
+// };
+
+
+// //redunadnt left/right click buttons to be removed before final game deployment
+// const controls = document.querySelector('.controls');
+// const leftButton = document.createElement('div');
+// const rightButton = document.createElement('div');
+// controls.appendChild(leftButton).setAttribute('id', 'left');
+// controls.appendChild(rightButton).setAttribute('id', 'right');
+// leftButton.textContent = '<<< Portside';
+// rightButton.textContent = 'Starboard >>>';
+// leftButton.addEventListener('click', moveLeft);
+// rightButton.addEventListener('click', moveRight);
