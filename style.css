@@ -4,32 +4,34 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  /* background-color: #000938; */
-  height: 96vh;
+  background-color: #000938;
+  height: 97vh;
   width: 98vw;
   font-family: 'Montalban-bold-italic', Helvetica, monospace;
   color: Mediumspringgreen;
 }
 
-main {
-  height: 80%;
-  width: 80%;
-  margin: -80px auto 0 auto;
+main.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 97vh;
+  width: 98%;
+  margin: 0 auto;
 }
 
 .grid {
+  background-color: red;
   display: flex;
   flex-wrap: wrap;
-  width: 210px;
+  width: 260px;
   height: 420px;
   justify-content: center;
   align-items: center;
-  margin: -75px auto;
+  margin: -320px auto 0 auto;
   transform: perspective(95px) rotateX(15deg);
 }
+
 @keyframes glow {
   0%{border-width: 2px}
   50%{border-width: 3px;
@@ -63,7 +65,7 @@ main {
   animation: glow 0.3s infinite;
 }
 
-.splash-menu, .splash-leaders {
+.splash-menu-intro, .splash-leaders {
   border: solid Mediumspringgreen 2px;
   text-align: center;
   background-color: #000938;
@@ -79,7 +81,7 @@ main {
   text-align: center;
 }
 
-section.info, section.controls {
+section.top-info {
   margin: 0 auto;
   height: 5%;
   width: 85%;
@@ -87,6 +89,12 @@ section.info, section.controls {
   display: flex;
   justify-content: space-between;
   z-index: 10;
+}
+.top-info h1 {
+  font-size: 35px;
+  text-decoration: underline;
+  word-spacing: 5px;
+  margin: -10px auto 0 auto;
 }
 
 span {
@@ -96,7 +104,7 @@ span {
   text-decoration: underline;
 }
 .grid div {
-  width: 20px;
+  width: 25px;
   height: 20px;
   margin: 0;
   border: solid Mediumspringgreen 0.5px;
@@ -105,10 +113,14 @@ span {
 }
 
 div.spacecraft {
+  border: none;
   background-image: url(images/spacecraft2.png);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   background-size: cover;
+  height: 18px;
+  padding-bottom: 2px;
+  background-position: center;
   transform: perspective(95px) rotateX(15deg);
 }
 
@@ -144,6 +156,14 @@ div.debris3 {
   background-image: url(images/debris3.png);
 }
 
+div.debris4 {
+  background-image: url(images/debris4.png);
+}
+
+div.debris5 {
+  background-image: url(images/debris5.png);
+}
+
 div.bonus {
   border: solid white 0.5px;
   border-radius: 10px;
@@ -164,18 +184,7 @@ div.bonus {
   90%{background-color: #dd00f3}
   100%{background-color: #ff2400}
 }
-.controls {
-  margin-top: 10px;
-  text-align: center;
-}
 
-.controls div {
-  background-color: #000938;
-  width: 175px;
-  height: 30px;
-  border: solid Mediumspringgreen 1px;
-  margin: 0 6px;
-}
 #background-img {
   position: fixed;
   left: 0;

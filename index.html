@@ -12,16 +12,54 @@
       <source src="https://media.giphy.com/media/U8mNh5DtWdi3C/giphy.mp4" type="video/mp4">
     </video> -->
 
-    <section class="info">
-      <span class="warpspeed">Warp Speed: 1</span>
-      <span class="score">Score: 000</span>
-    </section>
-    <main class="">
-      <section class="splash-menu">
+    <main class="container">
+      <section class="top-info">
+        <span class="warpspeed">Warp Speed: 0</span>
+        <h1>Warp Factor</h1>
+        <span class="score">Score: 000</span>
+      </section>
+      <section class="splash-menu-intro">
         <h2>Welcome to Warp Factor!</h2>
         <p>Can you navigate through the fabric of space-time and make it out unscathed?</p>
+        <p>The path will be obstructed by relatively, fast-travelling, incoming space debris.</p>
+        <p>Your task is to avoid or destroy the debris for as long as you can.</p>
+        <p class="pulse">Press SPACEBAR if you wish to proceed.</p>
+      </section>
+      <section class="splash-game-mode">
+        <h2>Select Game Mode</h2>
+        <span class="single-player">Single Player</span>
+        <span class="multiplayer">Multiplayer</span>
+        <p>Challenge</p>
+        <span class="arcade">Arcade</span>
+        <span class="boss">Boss</span>
+        <p class="pulse">Press SPACEBAR now to select your spacecraft.</p>
+      </section>
+      <section class="splash-ship-select">
+        <h2>Select Your Spacecraft</h2>
+        <div class="select-spacecraft1">
+          <img src="images/spacecraft1.png" alt="spacecraft1">
+          <span class="spacecraft-name"></span>
+          <span class="spacecraftHull"></span>
+          <span class="spacecraftWeapon"></span>
+        </div>
+        <p class="pulse">Press SPACEBAR to proceed to the Briefing.</p>
+      </section>
+      <section class="splash-instructions">
         <p>Using the ARROW keys on your keyboard, manoeuver the spacecraft safely to avoid the incoming space debris.</p>
-        <p class="pulse">Press SPACEBAR to begin your journey.</p>
+        <p>Along your journey you may come across anomalies which will give you bonus points and repair your hull,
+          collect these before they disappear.</p>
+        <p>Once you have entered warp, you may fire your ships weaponry by pressing SPACEBAR.</p>
+        <p class="pulse">Press SPACEBAR to enter warp.</p>
+      </section>
+      <section class="grid">
+      </section>
+      <section class="splash-pause">
+        <h2>Warp Suspended</h2>
+        <span class="resume">Resume</span>
+        <span class="restart">Restart</span>
+        <span class="main-menu">Main Menu</span>
+        <span class="sounds">Sounds</span>
+        <span class="music">Music</span>
       </section>
       <section class="splash-leaders">
         <h2>The Hall of Fame</h2>
@@ -29,12 +67,8 @@
         </ol>
         <p class="pulse">Press ESCAPE to return to the main menu.</p>
       </section>
-      <section class="grid">
-      </section>
     </main>
-    <section class="controls">
-
-    </section>
     <script src="app.js" charset="utf-8"></script>
+    <script src="user-path.js" charset="utf-8"></script>
   </body>
 </html>

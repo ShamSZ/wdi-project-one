@@ -4,19 +4,51 @@ const grid = document.querySelector('.grid');
 const scoreCounter = document.querySelector('.score');
 const warpMeter = document.querySelector('.warpspeed');
 // const video = document.querySelector('#background');
-const splashMenu = document.querySelector('.splash-menu');
+const splashMenu = document.querySelector('.splash-menu-intro');
+const splashGameMode = document.querySelector('.splash-game-mode');
+const splashShipSelect = document.querySelector('.splash-ship-select');
+const splashInstructions = document.querySelector('.splash-instructions');
+const splashPause = document.querySelector('.splash-pause');
 const splashLeaders = document.querySelector('.splash-leaders');
+
 const leaderboard = document.querySelector('.leaderboard');
+
 // video.pause();
+
+// User path
+// NOTE: use toggleElement to show where user is on user path
+// - splashMenu = true; / false;
+
+// allways show:
+  //H1
+// on load show:
+  //splashMenu
+  //
+
+  //on load hide:
+  toggleElement(warpMeter);
+  toggleElement(scoreCounter);
+
+  toggleElement(splashGameMode);
+  isSplashGameMode = false;
+  toggleElement(splashInstructions);
+  isSplashInstr = false;
+  toggleElement(splashShipSelect);
+  isSplashShipSel = false;
+  toggleElement(splashPause);
+  isSplashPause = false;
+  toggleElement(grid);
+  isSplashGrid = false;
+  toggleElement(splashLeaders);
+  isSplashLeaders = false;
+
 createGrid();
-toggleElement(splashLeaders);
 
 let spacecraftPos = 194;
 let spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
 spacecraft.classList.add('spacecraft');
 
-// NOTE: use toggleElement to show where user is on user path
-// - splashMenu = true; / false;
+
 
 //debris data
 let debrisPos1 = 0;
@@ -24,11 +56,11 @@ let debrisPos2 = 0;
 let debris1;
 let debris2;
 let incomingDebris1 = false;
-let debrisSlowness = 310;
+let debrisSlowness = 340;
 let fallingDown;
 let debrisClass1;
 let debrisClass2;
-const arrayOfDebrisImgClass = ['debris1', 'debris2', 'debris3'];
+const arrayOfDebrisImgClass = ['debris1', 'debris2', 'debris3', 'debris4', 'debris5'];
 
 //bonus points data
 let bonusPos;
@@ -38,7 +70,7 @@ let introduceBonus;
 
 //game progress data
 let score = 0;
-let warpSpeed = 1;
+let warpSpeed = 0;
 let isUserAlive;
 let speedIncrease;
 let gameIsRunning = false;
@@ -120,7 +152,7 @@ function resetGame(){
   scoreCounter.textContent = 'Score: 000';
   warpSpeed = 1;
   warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
-  debrisSlowness = 310;
+  debrisSlowness = 340;
   spacecraft.classList.remove('spacecraft');
   spacecraftPos = 194;
   spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
@@ -198,7 +230,6 @@ function moveLeft(){
     spacecraftPos--;
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
-    //NOTE when spacecraft is moved before timeout time can remove tilt class - the 'cell' remains tilted
     spacecraft.classList.add('tilt-left');
     setTimeout(function () {
       spacecraft.classList.remove('tilt-left');
@@ -217,7 +248,6 @@ function moveRight(){
     spacecraftPos++;
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
-    //NOTE when spacecraft is moved before timeout time can remove tilt class - the 'cell' remains tilted
     spacecraft.classList.add('tilt-right');
     setTimeout(function () {
       spacecraft.classList.remove('tilt-right');
@@ -299,6 +329,8 @@ function removeAllDebris(){
   document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris1'));
   document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris2'));
   document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris3'));
+  document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris4'));
+  document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris5'));
 }
 
 function generateBonus(){
