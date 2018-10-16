@@ -1,9 +1,9 @@
 console.log('Prepare for Warp!');
 
+// const video = document.querySelector('#background');
 const grid = document.querySelector('.grid');
 const scoreCounter = document.querySelector('.score');
 const warpMeter = document.querySelector('.warpspeed');
-// const video = document.querySelector('#background');
 const splashMenu = document.querySelector('.splash-menu-intro');
 const splashGameMode = document.querySelector('.splash-game-mode');
 const splashShipSelect = document.querySelector('.splash-ship-select');
@@ -12,6 +12,10 @@ const splashPause = document.querySelector('.splash-pause');
 const splashLeaders = document.querySelector('.splash-leaders');
 
 const leaderboard = document.querySelector('.leaderboard');
+const restartButton = document.querySelector('.restart');
+
+//need to test
+restartButton.addEventListener('click', resetGame);
 
 // video.pause();
 
@@ -20,27 +24,30 @@ const leaderboard = document.querySelector('.leaderboard');
 // - splashMenu = true; / false;
 
 // allways show:
-  //H1
+//H1
 // on load show:
-  //splashMenu
-  //
+//splashMenu
+//while on any splash menu except grid, splashMenu, splashPause,
+//only show that splash screen
+//during game, show grid, warpMeter, scoreCounter
+//during pause, show grid, warpMeter, scoreCounter, splashPause
 
-  //on load hide:
-  toggleElement(warpMeter);
-  toggleElement(scoreCounter);
-
-  toggleElement(splashGameMode);
-  isSplashGameMode = false;
-  toggleElement(splashInstructions);
-  isSplashInstr = false;
-  toggleElement(splashShipSelect);
-  isSplashShipSel = false;
-  toggleElement(splashPause);
-  isSplashPause = false;
-  toggleElement(grid);
-  isSplashGrid = false;
-  toggleElement(splashLeaders);
-  isSplashLeaders = false;
+//on load hide:
+toggleElement(warpMeter);
+toggleElement(scoreCounter);
+let isSplashMenu = true;
+toggleElement(splashGameMode);
+let isSplashGameMode = false;
+toggleElement(splashInstructions);
+let isSplashInstr = false;
+toggleElement(splashShipSelect);
+let isSplashShipSel = false;
+toggleElement(splashPause);
+let isSplashPause = false;
+toggleElement(grid);
+let isSplashGrid = false;
+toggleElement(splashLeaders);
+let isSplashLeaders = false;
 
 createGrid();
 
@@ -79,28 +86,100 @@ let leaders = [];
 
 //all keyboard listeners
 window.addEventListener('keydown', function(e) {
-  if (e.which === 38) {
+  if (e.which === 38) { // up arrow
     moveUp();
-  } else if (e.which === 40) {
+  } else if (e.which === 40) { //down arrow
     moveDown();
-  } else if (e.which === 37) {
+  } else if (e.which === 37) { //left arrow
     moveLeft();
-  } else if (e.which === 39) {
+  } else if (e.which === 39) { //up arrow
     moveRight();
-  } else if (e.which === 32) { //spacebar
-    if(gameIsRunning === false){
-      startGame();
+  } else if (e.which === 32) { //spacebar key
+    if (isSplashMenu){
       toggleElement(splashMenu);
-    } else {
-      console.log('Charging photon torpedoes!'); //add shooting function here
+      isSplashMenu = false;
+      toggleElement(splashGameMode);
+      isSplashGameMode = true;
+    } else if (isSplashGameMode){
+      toggleElement(splashGameMode);
+      isSplashGameMode = false;
+      toggleElement(splashShipSelect);
+      isSplashShipSel = true;
+    } else if (isSplashShipSel){
+      toggleElement(splashShipSelect);
+      isSplashShipSel = false;
+      toggleElement(splashInstructions);
+      isSplashInstr = true;
+    } else if (isSplashInstr){
+      toggleElement(splashInstructions);
+      isSplashInstr = false;
+      toggleElement(grid);
+      isSplashGrid = true;
+      if (isSplashGrid && (gameIsRunning === false)){
+        startGame();
+        toggleElement(warpMeter);
+        toggleElement(scoreCounter);
+      } else if (isSplashGrid && gameIsRunning) {
+        console.log('Charging photon torpedoes!'); //add shooting function here
+      }
     }
   } else if (e.which === 27) { //escape key
-    console.log('Reset scores and take me to the main menu!');
-    resetGame();
-    toggleElement(splashLeaders);
-    toggleElement(splashMenu);
+    if(isSplashGrid && gameIsRunning){
+      pauseGame();
+    } else if (isSplashPause && !gameIsRunning){
+      resumeGame();
+    } else if (isSplashLeaders){
+      toggleElement(splashLeaders);
+      isSplashLeaders = false;
+      toggleElement(splashMenu);
+      isSplashMenu = true;
+    }
   }
 });
+
+function runGame(){
+  isUserAlive = setInterval(function() {
+    if (incomingDebris1 === false) {
+      generateDebris();
+      incrementScoreBy(1000);
+      document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
+    } else if (spacecraft.classList.contains('debris')) {
+      console.log('Game Over! You have crashed.');
+      stopGame();
+      takeHighScore();
+      toggleElement(grid);
+      isSplashGrid = false;
+      toggleElement(warpMeter);
+      toggleElement(scoreCounter);
+    }
+    if (spacecraft.classList.contains('bonus')){
+      bonus.classList.remove('bonus');
+      isBonusAvailable = false;
+      incrementScoreBy(Math.floor(Math.random() * 10000));
+    }
+  }, 1);
+}
+
+function pauseGame(){
+  clearInterval(isUserAlive);
+  clearInterval(speedIncrease);
+  clearInterval(introduceBonus);
+  clearInterval(fallingDown);
+  gameIsRunning = false;
+  toggleElement(splashPause);
+  isSplashPause = true;
+  removeAllDebris();
+}
+
+function resumeGame(){
+  gameIsRunning = true;
+  generateDebris();
+  startGeneratingBonus();
+  runGame();
+  incrementSpeed();
+  toggleElement(splashPause);
+  isSplashPause = false;
+}
 
 function promptPlayerName(){
   playerName = window.prompt('Enter you name here Captain, and proceed to the Hall of Fame.', 'Captain');
@@ -161,25 +240,11 @@ function resetGame(){
 
 function startGame() {
   // video.play();
+  resetGame();
   gameIsRunning = true;
   generateDebris();
   startGeneratingBonus();
-  isUserAlive = setInterval(function() {
-    if (incomingDebris1 === false) {
-      generateDebris();
-      incrementScoreBy(1000);
-      document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
-    } else if (spacecraft.classList.contains('debris')) {
-      console.log('Game Over! You have crashed.');
-      stopGame();
-      takeHighScore();
-    }
-    if (spacecraft.classList.contains('bonus')){
-      bonus.classList.remove('bonus');
-      isBonusAvailable = false;
-      incrementScoreBy(Math.floor(Math.random() * 10000));
-    }
-  }, 1);
+  runGame();
   incrementSpeed();
 }
 
@@ -197,13 +262,14 @@ function stopGame(){
 function takeHighScore(){
   promptPlayerName();
   toggleElement(splashLeaders);
+  isSplashLeaders = true;
   leaderboard.innerHtml = '';
   addPlayerToHoF(playerName, score);
 }
 
 function toggleElement(element) {
   if (element.style.display === 'none') {
-    element.style.display = 'block';
+    element.style.display = 'flex';
   } else {
     element.style.display = 'none';
   }
