@@ -1,8 +1,5 @@
 console.log('Prepare for Warp!');
 
-//sounds/music
-let isMusicPlaying = false;
-let areSoundsOn = true;
 
 const grid = document.querySelector('.grid');
 const scoreCounter = document.querySelector('.score');
@@ -14,34 +11,28 @@ const splashInstructions = document.querySelector('.splash-instructions');
 const splashPause = document.querySelector('.splash-pause');
 const splashLeaders = document.querySelector('.splash-leaders');
 const leaderboard = document.querySelector('.leaderboard');
-const singlePlayer = document.querySelector('.single-player');
-const arcadeGameMode = document.querySelector('.arcade');
-const restartButton = document.querySelector('.restart');
-const mainMenuButton = document.querySelector('.main-menu');
 
-const toggleSoundsButton = document.querySelector('.sounds');
-const toggleMusicButton = document.querySelector('.music');
+//Sound and music
+let isMusicPlaying = false;
+let areSoundsOn = true;
 const music = document.querySelector('#bgmusic');
 const sfx = document.querySelector('#sfx');
 const toggleMusicIcon = document.querySelectorAll('.sound-controls i')[0];
 const toggleSoundIcon = document.querySelectorAll('.sound-controls i')[1];
-
-
-// restartButton.addEventListener('click', restartGame);
-// mainMenuButton.addEventListener('click', goToMainMenu);
-toggleSoundsButton.addEventListener('click', toggleSounds);
 toggleSoundIcon.addEventListener('click', toggleSoundsIcon);
-toggleMusicButton.addEventListener('click', toggleMusic);
 toggleMusicIcon.addEventListener('click', toggleMusic);
 
-// allways show:
-//H1
-// on load show:
-//splashMenu
-//while on any splash menu except grid, splashMenu, splashPause,
-//only show that splash screen
-//during game, show grid, warpMeter, scoreCounter
-//during pause, show grid, warpMeter, scoreCounter, splashPause
+//Pause menu buttons
+const toggleSoundsButton = document.querySelector('.sounds');
+const toggleMusicButton = document.querySelector('.music');
+const restartButton = document.querySelector('.restart');
+const mainMenuButton = document.querySelector('.main-menu');
+restartButton.addEventListener('click', restartGame);
+mainMenuButton.addEventListener('click', goToMainMenu);
+toggleSoundsButton.addEventListener('click', toggleSounds);
+toggleMusicButton.addEventListener('click', toggleMusic);
+
+
 //Different menus/screens:
 toggleElement(warpMeter);
 toggleElement(scoreCounter);
@@ -63,9 +54,9 @@ let isSplashLeaders = false;
 //Game Mode
 let isSinglePlayer = false;
 let isArcadeMode = false;
-
+const singlePlayer = document.querySelector('.single-player');
+const arcadeGameMode = document.querySelector('.arcade');
 singlePlayer.addEventListener('click', selectSinglePLayer);
-
 arcadeGameMode.addEventListener('click', selectArcadeMode);
 
 createGrid();
@@ -105,13 +96,21 @@ let leaders = [];
 //Keyboard listeners
 window.addEventListener('keydown', function(e) {
   if (e.which === 38) { // up arrow
-    moveUp();
+    if(gameIsRunning){
+      moveUp();
+    }
   } else if (e.which === 40) { //down arrow
-    moveDown();
+    if(gameIsRunning){
+      moveDown();
+    }
   } else if (e.which === 37) { //left arrow
-    moveLeft();
+    if(gameIsRunning){
+      moveLeft();
+    }
   } else if (e.which === 39) { //up arrow
-    moveRight();
+    if(gameIsRunning){
+      moveRight();
+    }
   } else if (e.which === 32) { //spacebar key
     if (isSplashMenu){
       toggleElement(splashMenu);
@@ -144,10 +143,6 @@ window.addEventListener('keydown', function(e) {
         }
       } else if (isSplashGrid && gameIsRunning) {
         console.log('Charging photon torpedoes!'); //add shooting function here
-        // if(areSoundsOn){
-        //   sfx.setAttribute('src', 'sounds/Laser_Cannon-Mike_Koenig-797224747.mp3');
-        //   sfx.play();
-        // }
       }
     }
   } else if (e.which === 27) { //escape key
@@ -169,6 +164,9 @@ window.addEventListener('keydown', function(e) {
     if (isSplashGameMode){
       selectSinglePLayer();
     }
+    if (isSplashPause){
+      toggleSounds();
+    }
   } else if (e.which === 77) { //M key
     if (isSplashPause){
       goToMainMenu();
@@ -176,6 +174,10 @@ window.addEventListener('keydown', function(e) {
   } else if (e.which === 82) { //R key
     if (isSplashPause){
       restartGame();
+    }
+  } else if (e.which === 85) { //U key
+    if (isSplashPause){
+      toggleMusic();
     }
   }
 });
