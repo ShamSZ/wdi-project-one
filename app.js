@@ -422,13 +422,18 @@ function pauseGame(){
 }
 
 function playBonusSound(){
-  if(spacecraftPos === bonusPos){
-    if(areSoundsOn){
-      sfx.setAttribute('src', 'sounds/bonusgained1.mp3');
-      sfx.play();
-      return;
+  const bonusSound = setInterval(function () {
+    if(spacecraftPos === bonusPos){
+      if(areSoundsOn){
+        const bonusSound1 = sfx.setAttribute('src', 'sounds/bonusgained1.mp3');
+        sfx.play();
+        clearInterval(bonusSound);
+        bonusSound1.addEventListener('ended', function(){
+          playBonusSound();
+        });
+      }
     }
-  }
+  }, 10);
 }
 
 function proceedToSelectShip(){
@@ -537,7 +542,6 @@ function startGame() {
   startGeneratingBonus();
   runGame();
   incrementSpeed();
-  playBonusSound();
 }
 
 function startGeneratingBonus(){
@@ -546,6 +550,7 @@ function startGeneratingBonus(){
       removeBonus();
       generateBonus();
     }
+    playBonusSound();
   } , 5000);
 }
 
@@ -555,7 +560,7 @@ function stopGame(){
   clearInterval(speedIncrease);
   clearInterval(introduceBonus);
   clearInterval(fallingDown);
-  clearInterval(playBonusSound);
+  clearInterval(bonusSound);
   removeBonus();
   removeAllDebris();
   warpTenHeading.classList.remove('warp10');
