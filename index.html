@@ -9,6 +9,11 @@
   </head>
   <body>
     <img id="background-img" src="images/warp-speed-bg.jpg" alt="vortex">
+    <div class="sound-controls">
+      <i class="fas fa-music"></i>
+      <i class="fas fa-volume-up"></i>
+      <!-- <i class="fas fa-volume-off"></i> -->
+    </div>
     <main class="container">
       <section class="top-info">
         <span class="warpspeed">Warp Speed: 0</span>
@@ -27,13 +32,13 @@
       <section class="splash-game-mode">
         <h2>Select Game Mode</h2>
         <div class="">
-          <span class="hover single-player">Single Player</span>
-          <span class="hover locked multiplayer"><i class="fas fa-lock"></i><span>Multiplayer</span></span>
+          <span class="hover single-player"><span class="underline">S</span>ingle Player</span>
+          <span class="hover locked multiplayer"><i class="fas fa-lock"></i><span><span class="underline">M</span>ultiplayer</span></span>
         </div>
         <h2>Challenge</h2>
         <div class="">
-          <span class="hover arcade">Arcade</span>
-          <span class="hover locked boss"><i class="fas fa-lock"></i><span>Boss</span></span>
+          <span class="hover arcade"><span class="underline">A</span>rcade</span>
+          <span class="hover locked boss"><i class="fas fa-lock"></i><span><span class="underline">B</span>oss</span></span>
         </div>
         <p class="pulse">Press <span class="yellow">SPACEBAR</span> now to select your spacecraft.</p>
       </section>
@@ -69,8 +74,8 @@
       </section>
       <section class="splash-pause">
         <h2>Warp Suspended</h2>
-        <span class="hover restart">Restart</span>
-        <span class="hover main-menu">Main Menu</span>
+        <span class="hover restart"><span class="underline">R</span>estart</span>
+        <span class="hover main-menu"><span class="underline">M</span>ain Menu</span>
         <span class="hover sounds">Sounds: ON</span>
         <span class="hover music">Music: OFF</span>
         <p class="resume pulse">Press <span class="yellow">ESCAPE</span> to Resume</p>
@@ -88,8 +93,8 @@
       <section class="grid">
       </section>
     </section>
-    <audio id="bgmusic" src="sounds/ES_Humanoid 2 - Johannes Bornlöf.mp3">
-    </audio>
+    <audio id="bgmusic" src="sounds/ES_Humanoid 2 - Johannes Bornlöf.mp3" loop></audio>
+    <audio id="sfx" src=""></audio>
     <script src="app.js" charset="utf-8"></script>
   </body>
 </html>

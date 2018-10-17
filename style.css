@@ -2,6 +2,9 @@
   font-family: 'Montalban-bold-italic';
   src: url('fonts/pixel-sagas_montalban/Montalban Bold Italic.otf');
 }
+i {
+  -webkit-text-stroke: 1px rgba(0, 9, 56, 1);
+}
 
 body {
   height: 97vh;
@@ -84,7 +87,6 @@ main.container {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  z-index: 10;
 }
 
 .splash-leaders div {
@@ -100,7 +102,13 @@ main.container {
   text-align: left;
   color: yellow;
 }
-
+.splash-leaders li:first-of-type {
+  /* color: red; */
+  animation: rainbow 3s infinite;
+}
+span.underline {
+  text-decoration: underline;
+}
 section.top-info {
   margin: 0 auto;
   height: 5%;
@@ -290,28 +298,42 @@ div.bonus {
 }
 
 @keyframes rainbow {
-  0%{background-color: #e81d1d}
-  10%{background-color: #e8b71d}
-  20%{background-color: #e3e81d}
-  30%{background-color: #e3e81d}
-  40%{background-color: #1de840}
-  50%{background-color: #1de840}
-  60%{background-color: #1ddde8}
-  70%{background-color: #2b1de8}
-  80%{background-color: #dd00f3}
-  90%{background-color: #dd00f3}
-  100%{background-color: #ff2400}
+  0%{color: #e81d1d}
+  10%{color: #e8b71d}
+  20%{color: #e3e81d}
+  30%{color: #e3e81d}
+  40%{color: #1de840}
+  50%{color: #1de840}
+  60%{color: #1ddde8}
+  70%{color: #2b1de8}
+  80%{color: #dd00f3}
+  90%{color: #dd00f3}
+  100%{color: #ff2400}
 }
 
+div.sound-controls {
+  color: yellow;
+  font-size: 20px;
+  width: 75px;
+  height: 25px;
+  position: absolute;
+  right: 1%;
+  display: flex;
+  justify-content: flex-end;
+  z-index: 15;
+}
 
+div.sound-controls i {
+  width: 33%;
+  margin-left: 5px;
+  margin-top: 5px;
+  margin-right: 5px;
+}
 
 #background-img {
-  /* opacity: 0.9; */
   position: fixed;
   left: -50vw;
   width: 200vw;
   bottom: 0;
   height: 170vh;
-  /* min-width: 100%;
-  min-height: 100%; */
 }

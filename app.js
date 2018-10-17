@@ -1,5 +1,9 @@
 console.log('Prepare for Warp!');
 
+//sounds/music
+let isMusicPlaying = false;
+let areSoundsOn = true;
+
 const grid = document.querySelector('.grid');
 const scoreCounter = document.querySelector('.score');
 const warpMeter = document.querySelector('.warpspeed');
@@ -14,15 +18,21 @@ const singlePlayer = document.querySelector('.single-player');
 const arcadeGameMode = document.querySelector('.arcade');
 const restartButton = document.querySelector('.restart');
 const mainMenuButton = document.querySelector('.main-menu');
+
 const toggleSoundsButton = document.querySelector('.sounds');
 const toggleMusicButton = document.querySelector('.music');
 const music = document.querySelector('#bgmusic');
+const sfx = document.querySelector('#sfx');
+const toggleMusicIcon = document.querySelectorAll('.sound-controls i')[0];
+const toggleSoundIcon = document.querySelectorAll('.sound-controls i')[1];
 
-restartButton.addEventListener('click', restartGame);
-mainMenuButton.addEventListener('click', goToMainMenu);
+
+// restartButton.addEventListener('click', restartGame);
+// mainMenuButton.addEventListener('click', goToMainMenu);
 toggleSoundsButton.addEventListener('click', toggleSounds);
+toggleSoundIcon.addEventListener('click', toggleSoundsIcon);
 toggleMusicButton.addEventListener('click', toggleMusic);
-
+toggleMusicIcon.addEventListener('click', toggleMusic);
 
 // allways show:
 //H1
@@ -49,23 +59,14 @@ let isSplashPause = false;
 let isSplashGrid = false;
 let isSplashLeaders = false;
 
-//sounds/music
-let isMusicPlaying = false;
-let areSoundsOn = true;
 
 //Game Mode
 let isSinglePlayer = false;
 let isArcadeMode = false;
 
-singlePlayer.addEventListener('click', function(){
-  singlePlayer.classList.add('selected');
-  isSinglePlayer = true;
-});
+singlePlayer.addEventListener('click', selectSinglePLayer);
 
-arcadeGameMode.addEventListener('click', function(){
-  arcadeGameMode.classList.add('selected');
-  isArcadeMode = true;
-});
+arcadeGameMode.addEventListener('click', selectArcadeMode);
 
 createGrid();
 
@@ -137,8 +138,16 @@ window.addEventListener('keydown', function(e) {
         startGame();
         toggleElement(warpMeter);
         toggleElement(scoreCounter);
+        if(areSoundsOn){
+          sfx.setAttribute('src', 'sounds/moveup.wav');
+          sfx.play();
+        }
       } else if (isSplashGrid && gameIsRunning) {
         console.log('Charging photon torpedoes!'); //add shooting function here
+        // if(areSoundsOn){
+        //   sfx.setAttribute('src', 'sounds/Laser_Cannon-Mike_Koenig-797224747.mp3');
+        //   sfx.play();
+        // }
       }
     }
   } else if (e.which === 27) { //escape key
@@ -151,6 +160,22 @@ window.addEventListener('keydown', function(e) {
       isSplashLeaders = false;
       toggleElement(splashMenu);
       isSplashMenu = true;
+    }
+  } else if (e.which === 65) { //A key
+    if (isSplashGameMode){
+      selectArcadeMode();
+    }
+  } else if (e.which === 83) { //S key
+    if (isSplashGameMode){
+      selectSinglePLayer();
+    }
+  } else if (e.which === 77) { //M key
+    if (isSplashPause){
+      goToMainMenu();
+    }
+  } else if (e.which === 82) { //R key
+    if (isSplashPause){
+      restartGame();
     }
   }
 });
@@ -271,6 +296,10 @@ function moveDown(){
     spacecraftPos = spacecraftPos + 10;
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.play();
+    }
   } else {
     grid.classList.add('grid-border-bottom');
     setTimeout(function () {
@@ -289,6 +318,10 @@ function moveLeft(){
     setTimeout(function () {
       spacecraft.classList.remove('tilt-left');
     }, 300);
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.play();
+    }
   } else {
     grid.classList.add('grid-border-left');
     setTimeout(function () {
@@ -307,6 +340,10 @@ function moveRight(){
     setTimeout(function () {
       spacecraft.classList.remove('tilt-right');
     }, 300);
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.play();
+    }
   } else {
     grid.classList.add('grid-border-right');
     setTimeout(function () {
@@ -321,6 +358,10 @@ function moveUp(){
     spacecraftPos = spacecraftPos - 10;
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.play();
+    }
   } else {
     grid.classList.add('grid-border-top');
     setTimeout(function () {
@@ -373,16 +414,19 @@ function runGame(){
       document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
     } else if (spacecraft.classList.contains('debris')) {
       console.log('Game Over! You have crashed.');
-      stopGame();
-      takeHighScore();
-      toggleElement(grid);
-      isSplashGrid = false;
-      toggleElement(warpMeter);
       toggleElement(scoreCounter);
+      toggleElement(warpMeter);
+      toggleElement(grid);
+      takeHighScore();
+      stopGame();
     }
     if (spacecraft.classList.contains('bonus')){
       bonus.classList.remove('bonus');
       isBonusAvailable = false;
+      if(areSoundsOn){
+        sfx.setAttribute('src', 'sounds/bonusgained1.mp3');
+        sfx.play();
+      }
       incrementScoreBy(Math.floor(Math.random() * 10000));
     }
   }, 1);
@@ -406,6 +450,10 @@ function restartGame(){
   isSplashPause = false;
   stopGame();
   startGame();
+  if(areSoundsOn){
+    sfx.setAttribute('src', 'sounds/moveup.wav');
+    sfx.play();
+  }
 }
 
 function resumeGame(){
@@ -416,6 +464,24 @@ function resumeGame(){
   incrementSpeed();
   toggleElement(splashPause);
   isSplashPause = false;
+}
+
+function selectSinglePLayer(){
+  singlePlayer.classList.add('selected');
+  isSinglePlayer = true;
+  if(areSoundsOn){
+    sfx.setAttribute('src', 'sounds/game-mode.wav');
+    sfx.play();
+  }
+}
+
+function selectArcadeMode() {
+  arcadeGameMode.classList.add('selected');
+  isArcadeMode = true;
+  if(areSoundsOn){
+    sfx.setAttribute('src', 'sounds/challenge-type.wav');
+    sfx.play();
+  }
 }
 
 function startGame() {
@@ -446,6 +512,10 @@ function stopGame(){
   removeBonus();
   removeAllDebris();
   gameIsRunning = false;
+  if(areSoundsOn){
+    sfx.setAttribute('src', 'sounds/movedown.wav');
+    sfx.play();
+  }
 }
 
 function suggestNextStep(){
@@ -468,12 +538,15 @@ function takeHighScore(){
 function toggleElement(element) {
   if (element.style.display === 'none') {
     element.style.display = 'flex';
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/click.mp3');
+      sfx.play();
+    }
   } else {
     element.style.display = 'none';
   }
 }
 
-// NOTE: need to finish:
 function toggleSounds(){
   if (areSoundsOn) {
     //disable all sounds
@@ -485,6 +558,22 @@ function toggleSounds(){
     areSoundsOn = true;
     console.log('sounds effects have been switched on');
     toggleSoundsButton.textContent = 'Sounds: ON';
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/click.mp3');
+      sfx.play();
+    }
+  }
+}
+
+function toggleSoundsIcon(){
+  if(areSoundsOn){
+    toggleSounds();
+    toggleSoundIcon.classList.remove('fa-volume-up');
+    toggleSoundIcon.classList.add('fa-volume-off');
+  } else {
+    toggleSounds();
+    toggleSoundIcon.classList.remove('fa-volume-off');
+    toggleSoundIcon.classList.add('fa-volume-up');
   }
 }
 
@@ -493,10 +582,18 @@ function toggleMusic(){
     music.pause();
     isMusicPlaying = false;
     toggleMusicButton.textContent = 'Music: OFF';
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/click.mp3');
+      sfx.play();
+    }
   } else {
     music.play();
     isMusicPlaying = true;
     toggleMusicButton.textContent = 'Music: ON';
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/click.mp3');
+      sfx.play();
+    }
   }
 }
 
@@ -510,12 +607,15 @@ function toggleMusic(){
 
 // const arrayOfSpaceshipImgClasses = ['spacecraft1', 'spacecraft2', 'spacecraft3', 'spacecraft4'];
 //
+// const iconSpacecraft1 = document.createElement('img').setAttribute('src', 'images/spacecraft1.png');
 // const spacecraft1 = {
 //   name: 'Wraith',
 //   hullIntegrity: 300,
 //   imgClass: 'spacecraft1',
-//   weapon: 'photonTorpedoes'
+//   weapon: 'photonTorpedoes',
+//   icon: iconSpacecraft1
 // };
+// splashMenu.appendChild(iconSpacecraft1).setAttribute('src', 'images/spacecraft1.png');
 // const spacecraft2 = {
 //   name: 'Blade',
 //   hullIntegrity: 200,
