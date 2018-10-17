@@ -88,11 +88,12 @@ main.container {
 }
 
 .splash-leaders div {
-  min-height: 75%;
-  max-width: 70%;
-  width: 50%;
-  transform: perspective(35px) rotateX(-1deg);
+  height: 75%;
+  width: 80%;
+  /* min-width: 60%; */
+  transform: perspective(35px) rotateX(-2deg);
   margin: 0 auto;
+  margin-top: 30px;
 }
 
 .splash-leaders li {
@@ -136,10 +137,10 @@ h2 {
 }
 
 .top-info h1 {
-  font-size: 35px;
-  text-decoration: underline;
+  font-size: 45px;
   word-spacing: 5px;
   margin: -10px auto 0 auto;
+  -webkit-text-stroke: 1px rgba(0, 9, 56, 1);
 }
 
 .top-info span {
@@ -157,6 +158,12 @@ h2 {
   width: 250px;
   border: solid Mediumspringgreen 1px;
   font-size: 20px;
+}
+.splash-ship-select .previous-spacecraft, .splash-ship-select .next-spacecraft {
+  width: 10%;
+  height: 25%;
+  margin: 8% 1%;
+  font-size: 35px;
 }
 
 .splash-pause span {
@@ -247,6 +254,35 @@ div.bonus {
   animation-timing-function: linear;
 }
 
+.splash-game-mode span.selected {
+  border-left: yellow 5px;
+  border-right: yellow 5px;
+  border-style: double;
+  width: 245px;
+  /* background-color: rgba(0, 9, 56, 1); */
+}
+
+
+.locked i, .locked:hover span {
+  visibility:hidden;
+}
+
+.locked:hover i {
+ visibility:visible;
+}
+
+.locked i {
+  position: absolute;
+  left: 45%;
+  top: 20%;
+  color: yellow;
+}
+
+.locked {
+  position: relative;
+  transition: all 1s;
+}
+
 @keyframes pulse {
   0%{opacity: 1}
   50%{opacity: 0.5}
@@ -272,9 +308,10 @@ div.bonus {
 #background-img {
   /* opacity: 0.9; */
   position: fixed;
-  left: -800px;
+  left: -50vw;
+  width: 200vw;
   bottom: 0;
-  height: 200%;
+  height: 170vh;
   /* min-width: 100%;
   min-height: 100%; */
 }

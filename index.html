@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Warp Factor</title>
   </head>
@@ -27,25 +28,33 @@
         <h2>Select Game Mode</h2>
         <div class="">
           <span class="hover single-player">Single Player</span>
-          <span class="hover multiplayer">Multiplayer</span>
+          <span class="hover locked multiplayer"><i class="fas fa-lock"></i><span>Multiplayer</span></span>
         </div>
         <h2>Challenge</h2>
         <div class="">
           <span class="hover arcade">Arcade</span>
-          <span class="hover boss">Boss</span>
+          <span class="hover locked boss"><i class="fas fa-lock"></i><span>Boss</span></span>
         </div>
         <p class="pulse">Press <span class="yellow">SPACEBAR</span> now to select your spacecraft.</p>
       </section>
       <section class="splash-ship-select">
         <h2>Select Your Spacecraft</h2>
         <div class="select-spacecraft1">
+          <div class="previous-spacecraft">
+            <i class="fas fa-chevron-left"></i>
+            <i class="fas yellow fa-lock"></i>
+          </div>
           <div class="spacecraft-image">
             <img src="images/spacecraft1.png" alt="spacecraft1">
           </div>
           <div class="spacecraft-stats">
-            <p>Name:</p><span class="yellow spacecraft-name">shipName</span>
-            <p>Hull Strength:</p><span class="yellow spacecraftHull">400</span>
-            <p>Weaponry:</p><span class="yellow spacecraftWeapon">Photon Canon</span>
+            <p>Name:</p><span class="yellow spacecraft-name">Wraith</span>
+            <p>Hull Strength:</p><span class="yellow spacecraftHull">300</span>
+            <p>Weaponry:</p><span class="yellow spacecraftWeapon">Photon Torpedoes</span>
+          </div>
+          <div class="next-spacecraft">
+            <i class="fas yellow fa-lock"></i>
+            <i class="fas fa-chevron-right"></i>
           </div>
         </div>
         <p class="pulse">Press <span class="yellow">SPACEBAR</span> to proceed to the Briefing.</p>

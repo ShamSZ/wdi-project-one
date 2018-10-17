@@ -1,6 +1,5 @@
 console.log('Prepare for Warp!');
 
-// const video = document.querySelector('#background');
 const grid = document.querySelector('.grid');
 const scoreCounter = document.querySelector('.score');
 const warpMeter = document.querySelector('.warpspeed');
@@ -10,18 +9,14 @@ const splashShipSelect = document.querySelector('.splash-ship-select');
 const splashInstructions = document.querySelector('.splash-instructions');
 const splashPause = document.querySelector('.splash-pause');
 const splashLeaders = document.querySelector('.splash-leaders');
-
 const leaderboard = document.querySelector('.leaderboard');
+const singlePlayer = document.querySelector('.single-player');
+const arcadeGameMode = document.querySelector('.arcade');
 const restartButton = document.querySelector('.restart');
 
 //need to test
-restartButton.addEventListener('click', resetGame);
-
-// video.pause();
-
-// User path
-// NOTE: use toggleElement to show where user is on user path
-// - splashMenu = true; / false;
+// restartButton.addEventListener('click', restartGame);
+//add restartGame function
 
 // allways show:
 //H1
@@ -31,33 +26,44 @@ restartButton.addEventListener('click', resetGame);
 //only show that splash screen
 //during game, show grid, warpMeter, scoreCounter
 //during pause, show grid, warpMeter, scoreCounter, splashPause
-
-//on load hide:
+//Different menus/screens:
 toggleElement(warpMeter);
 toggleElement(scoreCounter);
-let isSplashMenu = true;
 toggleElement(splashGameMode);
-let isSplashGameMode = false;
 toggleElement(splashInstructions);
-let isSplashInstr = false;
 toggleElement(splashShipSelect);
-let isSplashShipSel = false;
 toggleElement(splashPause);
-let isSplashPause = false;
 toggleElement(grid);
-let isSplashGrid = false;
 toggleElement(splashLeaders);
+let isSplashMenu = true;
+let isSplashGameMode = false;
+let isSplashInstr = false;
+let isSplashShipSel = false;
+let isSplashPause = false;
+let isSplashGrid = false;
 let isSplashLeaders = false;
 
-createGrid();
+//Game Mode
+let isSinglePlayer = false;
+let isArcadeMode = false;
 
+singlePlayer.addEventListener('click', function(){
+  singlePlayer.classList.add('selected');
+  isSinglePlayer = true;
+});
+
+arcadeGameMode.addEventListener('click', function(){
+  arcadeGameMode.classList.add('selected');
+  isArcadeMode = true;
+});
+
+createGrid();
+//Spacecraft data
 let spacecraftPos = 194;
 let spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
 spacecraft.classList.add('spacecraft');
 
-
-
-//debris data
+//Debris data
 let debrisPos1 = 0;
 let debrisPos2 = 0;
 let debris1;
@@ -69,13 +75,13 @@ let debrisClass1;
 let debrisClass2;
 const arrayOfDebrisImgClass = ['debris1', 'debris2', 'debris3', 'debris4', 'debris5'];
 
-//bonus points data
+//Bonus points data
 let bonusPos;
 let isBonusAvailable = false;
 let bonus;
 let introduceBonus;
 
-//game progress data
+//Game progress data
 let score = 0;
 let warpSpeed = 0;
 let isUserAlive;
@@ -84,7 +90,7 @@ let gameIsRunning = false;
 let playerName;
 let leaders = [];
 
-//all keyboard listeners
+//Keyboard listeners
 window.addEventListener('keydown', function(e) {
   if (e.which === 38) { // up arrow
     moveUp();
@@ -101,10 +107,11 @@ window.addEventListener('keydown', function(e) {
       toggleElement(splashGameMode);
       isSplashGameMode = true;
     } else if (isSplashGameMode){
-      toggleElement(splashGameMode);
-      isSplashGameMode = false;
-      toggleElement(splashShipSelect);
-      isSplashShipSel = true;
+      if(isSinglePlayer && isArcadeMode){
+        proceedToSelectShip();
+      } else {
+        suggestNextStep();
+      }
     } else if (isSplashShipSel){
       toggleElement(splashShipSelect);
       isSplashShipSel = false;
@@ -420,9 +427,21 @@ function incrementScoreBy(points){
   scoreCounter.textContent = `Score: ${score}`;
 }
 
+function proceedToSelectShip(){
+  toggleElement(splashGameMode);
+  isSplashGameMode = false;
+  toggleElement(splashShipSelect);
+  isSplashShipSel = true;
+}
 
-
-
+function suggestNextStep(){
+  const suggestion = document.createElement('span');
+  suggestion.textContent = 'Please select Game Mode and Challenge Type to proceed.';
+  splashGameMode.insertBefore(suggestion, document.querySelector('.splash-game-mode').children[4]);
+  setTimeout(function () {
+    splashGameMode.removeChild(suggestion);
+  }, 2000);
+}
 
 //NOTE: EXTRA - background music and sfx
 //NOTE: EXTRA - at warp 10, popup pulsing heading showing max warp factor reached
@@ -458,15 +477,3 @@ function incrementScoreBy(points){
 //   imgClass: 'spacecraft4',
 //   weapon: 'plasmaGun'
 // };
-
-
-// //redunadnt left/right click buttons to be removed before final game deployment
-// const controls = document.querySelector('.controls');
-// const leftButton = document.createElement('div');
-// const rightButton = document.createElement('div');
-// controls.appendChild(leftButton).setAttribute('id', 'left');
-// controls.appendChild(rightButton).setAttribute('id', 'right');
-// leftButton.textContent = '<<< Portside';
-// rightButton.textContent = 'Starboard >>>';
-// leftButton.addEventListener('click', moveLeft);
-// rightButton.addEventListener('click', moveRight);
