@@ -13,10 +13,16 @@ const leaderboard = document.querySelector('.leaderboard');
 const singlePlayer = document.querySelector('.single-player');
 const arcadeGameMode = document.querySelector('.arcade');
 const restartButton = document.querySelector('.restart');
+const mainMenuButton = document.querySelector('.main-menu');
+const toggleSoundsButton = document.querySelector('.sounds');
+const toggleMusicButton = document.querySelector('.music');
+const music = document.querySelector('#bgmusic');
 
-//need to test
-// restartButton.addEventListener('click', restartGame);
-//add restartGame function
+restartButton.addEventListener('click', restartGame);
+mainMenuButton.addEventListener('click', goToMainMenu);
+toggleSoundsButton.addEventListener('click', toggleSounds);
+toggleMusicButton.addEventListener('click', toggleMusic);
+
 
 // allways show:
 //H1
@@ -43,6 +49,10 @@ let isSplashPause = false;
 let isSplashGrid = false;
 let isSplashLeaders = false;
 
+//sounds/music
+let isMusicPlaying = false;
+let areSoundsOn = true;
+
 //Game Mode
 let isSinglePlayer = false;
 let isArcadeMode = false;
@@ -58,6 +68,7 @@ arcadeGameMode.addEventListener('click', function(){
 });
 
 createGrid();
+
 //Spacecraft data
 let spacecraftPos = 194;
 let spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
@@ -144,54 +155,6 @@ window.addEventListener('keydown', function(e) {
   }
 });
 
-function runGame(){
-  isUserAlive = setInterval(function() {
-    if (incomingDebris1 === false) {
-      generateDebris();
-      incrementScoreBy(1000);
-      document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
-    } else if (spacecraft.classList.contains('debris')) {
-      console.log('Game Over! You have crashed.');
-      stopGame();
-      takeHighScore();
-      toggleElement(grid);
-      isSplashGrid = false;
-      toggleElement(warpMeter);
-      toggleElement(scoreCounter);
-    }
-    if (spacecraft.classList.contains('bonus')){
-      bonus.classList.remove('bonus');
-      isBonusAvailable = false;
-      incrementScoreBy(Math.floor(Math.random() * 10000));
-    }
-  }, 1);
-}
-
-function pauseGame(){
-  clearInterval(isUserAlive);
-  clearInterval(speedIncrease);
-  clearInterval(introduceBonus);
-  clearInterval(fallingDown);
-  gameIsRunning = false;
-  toggleElement(splashPause);
-  isSplashPause = true;
-  removeAllDebris();
-}
-
-function resumeGame(){
-  gameIsRunning = true;
-  generateDebris();
-  startGeneratingBonus();
-  runGame();
-  incrementSpeed();
-  toggleElement(splashPause);
-  isSplashPause = false;
-}
-
-function promptPlayerName(){
-  playerName = window.prompt('Enter you name here Captain, and proceed to the Hall of Fame.', 'Captain');
-}
-
 function addPlayerToHoF(playerName, score){
   class Player{
     constructor(name, highScore){
@@ -218,6 +181,76 @@ function addPlayerToHoF(playerName, score){
   });
 }
 
+function compare(a,b) {
+  if (a.highScore > b.highScore)
+    return -1;
+  if (a.highScore < b.highScore)
+    return 1;
+  return 0;
+}
+
+function createGrid(){
+  for(let i = 0; i < 200; i++){
+    const newGrid = document.createElement('div');
+    grid.appendChild(newGrid).setAttribute('id', i);
+  }
+}
+
+function generateBonus(){
+  bonusPos = (Math.floor(Math.random() * 190));
+  bonus = document.querySelectorAll('.grid div')[bonusPos];
+  bonus.classList.add('bonus');
+  isBonusAvailable = true;
+}
+
+function generateDebris() {
+  if (spacecraft.classList.contains('debris') === false){
+    debrisClass1 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
+    debrisClass2 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
+    incomingDebris1 = true;
+    debrisPos1 = (Math.floor(Math.random() * 9));
+    debrisPos2 = debrisPos1 + Math.floor(Math.random()*19);
+    debris1 = document.querySelectorAll('.grid div')[debrisPos1];
+    debris2 = document.querySelectorAll('.grid div')[debrisPos2];
+    debris1.classList.add('debris', debrisClass1);
+    debris2.classList.add('debris', debrisClass2);
+    fallingDown = setInterval(function(){
+      if (debrisPos2 < 200 && debrisPos2.toString().slice(0,2) !== '19'){
+        debrisPos1 = debrisPos1+10;
+        debrisPos2 = debrisPos2+10;
+        debris1.classList.remove('debris', debrisClass1);
+        debris2.classList.remove('debris', debrisClass2);
+        debris1 = document.querySelectorAll('.grid div')[debrisPos1];
+        debris2 = document.querySelectorAll('.grid div')[debrisPos2];
+        debris1.classList.add('debris', debrisClass1);
+        debris2.classList.add('debris', debrisClass2);
+      } else {
+        incomingDebris1 = false;
+        clearInterval(fallingDown);
+        debris1.classList.remove('debris', debrisClass1);
+        debris2.classList.remove('debris', debrisClass2);
+      }
+    }, debrisSlowness);
+  }
+}
+
+function goToMainMenu(){
+  toggleElement(splashPause);
+  isSplashPause = false;
+  stopGame();
+  toggleElement(warpMeter);
+  toggleElement(scoreCounter);
+  toggleElement(grid);
+  isSplashGrid = false;
+  toggleElement(splashMenu);
+  isSplashMenu = true;
+}
+
+function incrementScoreBy(points){
+  score = score + points;
+  scoreCounter.textContent = `Score: ${score}`;
+}
+
 function incrementSpeed(){
   speedIncrease = setInterval(function() {
     debrisSlowness = debrisSlowness - 30;
@@ -232,68 +265,17 @@ function incrementSpeed(){
   }, 5000 );
 }
 
-function resetGame(){
-  stopGame();
-  score = 0;
-  scoreCounter.textContent = 'Score: 000';
-  warpSpeed = 1;
-  warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
-  debrisSlowness = 340;
-  spacecraft.classList.remove('spacecraft');
-  spacecraftPos = 194;
-  spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
-  spacecraft.classList.add('spacecraft');
-}
-
-function startGame() {
-  // video.play();
-  resetGame();
-  gameIsRunning = true;
-  generateDebris();
-  startGeneratingBonus();
-  runGame();
-  incrementSpeed();
-}
-
-function stopGame(){
-  // video.pause();
-  clearInterval(isUserAlive);
-  clearInterval(speedIncrease);
-  clearInterval(introduceBonus);
-  clearInterval(fallingDown);
-  removeBonus();
-  removeAllDebris();
-  gameIsRunning = false;
-}
-
-function takeHighScore(){
-  promptPlayerName();
-  toggleElement(splashLeaders);
-  isSplashLeaders = true;
-  leaderboard.innerHtml = '';
-  addPlayerToHoF(playerName, score);
-}
-
-function toggleElement(element) {
-  if (element.style.display === 'none') {
-    element.style.display = 'flex';
+function moveDown(){
+  if(spacecraftPos < 190){
+    spacecraft.classList.remove('spacecraft');
+    spacecraftPos = spacecraftPos + 10;
+    spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+    spacecraft.classList.add('spacecraft');
   } else {
-    element.style.display = 'none';
-  }
-}
-
-function compare(a,b) {
-  if (a.highScore > b.highScore)
-    return -1;
-  if (a.highScore < b.highScore)
-    return 1;
-  return 0;
-}
-
-function createGrid(){
-  for(let i = 0; i < 200; i++){
-    const newGrid = document.createElement('div');
-    grid.appendChild(newGrid).setAttribute('id', i);
+    grid.classList.add('grid-border-bottom');
+    setTimeout(function () {
+      grid.classList.remove('grid-border-bottom');
+    }, 300);
   }
 }
 
@@ -347,49 +329,26 @@ function moveUp(){
   }
 }
 
-function moveDown(){
-  if(spacecraftPos < 190){
-    spacecraft.classList.remove('spacecraft');
-    spacecraftPos = spacecraftPos + 10;
-    spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
-    spacecraft.classList.add('spacecraft');
-  } else {
-    grid.classList.add('grid-border-bottom');
-    setTimeout(function () {
-      grid.classList.remove('grid-border-bottom');
-    }, 300);
-  }
+function pauseGame(){
+  clearInterval(isUserAlive);
+  clearInterval(speedIncrease);
+  clearInterval(introduceBonus);
+  clearInterval(fallingDown);
+  gameIsRunning = false;
+  toggleElement(splashPause);
+  isSplashPause = true;
+  removeAllDebris();
 }
 
-function generateDebris() {
-  if (spacecraft.classList.contains('debris') === false){
-    debrisClass1 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
-    debrisClass2 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
-    incomingDebris1 = true;
-    debrisPos1 = (Math.floor(Math.random() * 9));
-    debrisPos2 = debrisPos1 + Math.floor(Math.random()*19);
-    debris1 = document.querySelectorAll('.grid div')[debrisPos1];
-    debris2 = document.querySelectorAll('.grid div')[debrisPos2];
-    debris1.classList.add('debris', debrisClass1);
-    debris2.classList.add('debris', debrisClass2);
-    fallingDown = setInterval(function(){
-      if (debrisPos2 < 200 && debrisPos2.toString().slice(0,2) !== '19'){
-        debrisPos1 = debrisPos1+10;
-        debrisPos2 = debrisPos2+10;
-        debris1.classList.remove('debris', debrisClass1);
-        debris2.classList.remove('debris', debrisClass2);
-        debris1 = document.querySelectorAll('.grid div')[debrisPos1];
-        debris2 = document.querySelectorAll('.grid div')[debrisPos2];
-        debris1.classList.add('debris', debrisClass1);
-        debris2.classList.add('debris', debrisClass2);
-      } else {
-        incomingDebris1 = false;
-        clearInterval(fallingDown);
-        debris1.classList.remove('debris', debrisClass1);
-        debris2.classList.remove('debris', debrisClass2);
-      }
-    }, debrisSlowness);
-  }
+function proceedToSelectShip(){
+  toggleElement(splashGameMode);
+  isSplashGameMode = false;
+  toggleElement(splashShipSelect);
+  isSplashShipSel = true;
+}
+
+function promptPlayerName(){
+  playerName = window.prompt('Enter you name here Captain, and proceed to the Hall of Fame.', 'Captain');
 }
 
 function removeBonus(){
@@ -406,11 +365,67 @@ function removeAllDebris(){
   document.querySelectorAll('.grid div').forEach(element => element.classList.remove('debris5'));
 }
 
-function generateBonus(){
-  bonusPos = (Math.floor(Math.random() * 190));
-  bonus = document.querySelectorAll('.grid div')[bonusPos];
-  bonus.classList.add('bonus');
-  isBonusAvailable = true;
+function runGame(){
+  isUserAlive = setInterval(function() {
+    if (incomingDebris1 === false) {
+      generateDebris();
+      incrementScoreBy(1000);
+      document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
+    } else if (spacecraft.classList.contains('debris')) {
+      console.log('Game Over! You have crashed.');
+      stopGame();
+      takeHighScore();
+      toggleElement(grid);
+      isSplashGrid = false;
+      toggleElement(warpMeter);
+      toggleElement(scoreCounter);
+    }
+    if (spacecraft.classList.contains('bonus')){
+      bonus.classList.remove('bonus');
+      isBonusAvailable = false;
+      incrementScoreBy(Math.floor(Math.random() * 10000));
+    }
+  }, 1);
+}
+
+function resetGame(){
+  stopGame();
+  score = 0;
+  scoreCounter.textContent = 'Score: 000';
+  warpSpeed = 1;
+  warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
+  debrisSlowness = 340;
+  spacecraft.classList.remove('spacecraft');
+  spacecraftPos = 194;
+  spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
+  spacecraft.classList.add('spacecraft');
+}
+
+function restartGame(){
+  toggleElement(splashPause);
+  isSplashPause = false;
+  stopGame();
+  startGame();
+}
+
+function resumeGame(){
+  gameIsRunning = true;
+  generateDebris();
+  startGeneratingBonus();
+  runGame();
+  incrementSpeed();
+  toggleElement(splashPause);
+  isSplashPause = false;
+}
+
+function startGame() {
+  // video.play();
+  resetGame();
+  gameIsRunning = true;
+  generateDebris();
+  startGeneratingBonus();
+  runGame();
+  incrementSpeed();
 }
 
 function startGeneratingBonus(){
@@ -422,16 +437,15 @@ function startGeneratingBonus(){
   } , 5000);
 }
 
-function incrementScoreBy(points){
-  score = score + points;
-  scoreCounter.textContent = `Score: ${score}`;
-}
-
-function proceedToSelectShip(){
-  toggleElement(splashGameMode);
-  isSplashGameMode = false;
-  toggleElement(splashShipSelect);
-  isSplashShipSel = true;
+function stopGame(){
+  // video.pause();
+  clearInterval(isUserAlive);
+  clearInterval(speedIncrease);
+  clearInterval(introduceBonus);
+  clearInterval(fallingDown);
+  removeBonus();
+  removeAllDebris();
+  gameIsRunning = false;
 }
 
 function suggestNextStep(){
@@ -441,6 +455,49 @@ function suggestNextStep(){
   setTimeout(function () {
     splashGameMode.removeChild(suggestion);
   }, 2000);
+}
+
+function takeHighScore(){
+  promptPlayerName();
+  toggleElement(splashLeaders);
+  isSplashLeaders = true;
+  leaderboard.innerHtml = '';
+  addPlayerToHoF(playerName, score);
+}
+
+function toggleElement(element) {
+  if (element.style.display === 'none') {
+    element.style.display = 'flex';
+  } else {
+    element.style.display = 'none';
+  }
+}
+
+// NOTE: need to finish:
+function toggleSounds(){
+  if (areSoundsOn) {
+    //disable all sounds
+    areSoundsOn = false;
+    console.log('sounds effects have been switched off');
+    toggleSoundsButton.textContent = 'Sounds: OFF';
+  } else {
+    //enable all sounds
+    areSoundsOn = true;
+    console.log('sounds effects have been switched on');
+    toggleSoundsButton.textContent = 'Sounds: ON';
+  }
+}
+
+function toggleMusic(){
+  if (isMusicPlaying){
+    music.pause();
+    isMusicPlaying = false;
+    toggleMusicButton.textContent = 'Music: OFF';
+  } else {
+    music.play();
+    isMusicPlaying = true;
+    toggleMusicButton.textContent = 'Music: ON';
+  }
 }
 
 //NOTE: EXTRA - background music and sfx
