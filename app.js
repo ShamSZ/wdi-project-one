@@ -11,10 +11,11 @@ const splashInstructions = document.querySelector('.splash-instructions');
 const splashPause = document.querySelector('.splash-pause');
 const splashLeaders = document.querySelector('.splash-leaders');
 const leaderboard = document.querySelector('.leaderboard');
-
+const warpTenHeading = document.querySelector('.grid h3');
 //Sound and music
 let isMusicPlaying = false;
 let areSoundsOn = true;
+let bonusSound;
 const music = document.querySelector('#bgmusic');
 const sfx = document.querySelector('#sfx');
 const toggleMusicIcon = document.querySelectorAll('.sound-controls i')[0];
@@ -49,7 +50,6 @@ let isSplashShipSel = false;
 let isSplashPause = false;
 let isSplashGrid = false;
 let isSplashLeaders = false;
-
 
 //Game Mode
 let isSinglePlayer = false;
@@ -141,11 +141,18 @@ window.addEventListener('keydown', function(e) {
           sfx.setAttribute('src', 'sounds/moveup.wav');
           sfx.play();
         }
-      } else if (isSplashGrid && gameIsRunning) {
-        console.log('Charging photon torpedoes!'); //add shooting function here
       }
+    } else if (isSplashGrid && gameIsRunning) {
+      //add shooting function here
+      if(areSoundsOn){
+        sfx.setAttribute('src', 'sounds/Laser_Cannon-Mike_Koenig-797224747.mp3');
+        sfx.play();
+      }
+      setTimeout(function () {
+        fire();
+      }, 500);
     }
-  } else if (e.which === 27) { //escape key
+  } else if (e.which === 27) { //Escape key
     if(isSplashGrid && gameIsRunning){
       pauseGame();
     } else if (isSplashPause && !gameIsRunning){
@@ -181,6 +188,35 @@ window.addEventListener('keydown', function(e) {
     }
   }
 });
+//Fire testing
+let laserPos = spacecraftPos;
+let laser;
+let laserTrajectory;
+function fire(){
+  console.log('Charging photon torpedoes!');
+  laserPos = spacecraftPos - 10;
+  laser = document.querySelectorAll('.grid div')[laserPos];
+  laser.classList.add('laser');
+  laserTrajectory = setInterval(function(){
+    if(laserPos >= 10){
+      laserPos = laserPos - 10;
+      laser.classList.remove('laser');
+      laser = document.querySelectorAll('.grid div')[laserPos];
+      laser.classList.add('laser');
+    } else if (laserPos < 10){
+      clearInterval(laserTrajectory);
+      laser.classList.remove('laser');
+    }
+  }, 100);
+}
+
+// setInterval(function(){
+//   if((laserPos === debrisPos1) || (laserPos === debrisPos2)){
+//     // console.log('hit');
+//     incrementScoreBy(10000);
+//   }
+// }, 1);
+//fire testing
 
 function addPlayerToHoF(playerName, score){
   class Player{
@@ -231,7 +267,7 @@ function generateBonus(){
 }
 
 function generateDebris() {
-  if (spacecraft.classList.contains('debris') === false){
+  if ((spacecraftPos !== debrisPos1) || (spacecraftPos !== debrisPos2)){
     debrisClass1 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
     debrisClass2 = arrayOfDebrisImgClass[Math.floor(Math.random()*arrayOfDebrisImgClass.length)];
     incomingDebris1 = true;
@@ -243,8 +279,8 @@ function generateDebris() {
     debris2.classList.add('debris', debrisClass2);
     fallingDown = setInterval(function(){
       if (debrisPos2 < 200 && debrisPos2.toString().slice(0,2) !== '19'){
-        debrisPos1 = debrisPos1+10;
-        debrisPos2 = debrisPos2+10;
+        debrisPos1 = debrisPos1 + 10;
+        debrisPos2 = debrisPos2 + 10;
         debris1.classList.remove('debris', debrisClass1);
         debris2.classList.remove('debris', debrisClass2);
         debris1 = document.querySelectorAll('.grid div')[debrisPos1];
@@ -286,6 +322,8 @@ function incrementSpeed(){
     warpMeter.textContent = `Warp Speed: ${warpSpeed}`;
     console.log('Increasing warp speed...', warpSpeed);
     if (warpSpeed === 10){
+      warpTenHeading.classList.add('warp10');
+      warpTenHeading.classList.remove('invisible');
       console.log('Warp speed 10 achieved!', warpSpeed);
       clearInterval(speedIncrease);
     }
@@ -383,6 +421,16 @@ function pauseGame(){
   removeAllDebris();
 }
 
+function playBonusSound(){
+  if(spacecraftPos === bonusPos){
+    if(areSoundsOn){
+      sfx.setAttribute('src', 'sounds/bonusgained1.mp3');
+      sfx.play();
+      return;
+    }
+  }
+}
+
 function proceedToSelectShip(){
   toggleElement(splashGameMode);
   isSplashGameMode = false;
@@ -414,22 +462,17 @@ function runGame(){
       generateDebris();
       incrementScoreBy(1000);
       document.querySelectorAll('.grid div').forEach(element => element.classList.remove('tilt-left'));
-    } else if (spacecraft.classList.contains('debris')) {
+    } else if ((spacecraftPos === debrisPos1) || (spacecraftPos === debrisPos2)) {
       console.log('Game Over! You have crashed.');
       toggleElement(scoreCounter);
       toggleElement(warpMeter);
       toggleElement(grid);
       takeHighScore();
       stopGame();
-    }
-    if (spacecraft.classList.contains('bonus')){
+    } else if (spacecraftPos === bonusPos){
       bonus.classList.remove('bonus');
       isBonusAvailable = false;
-      if(areSoundsOn){
-        sfx.setAttribute('src', 'sounds/bonusgained1.mp3');
-        sfx.play();
-      }
-      incrementScoreBy(Math.floor(Math.random() * 10000));
+      incrementScoreBy(Math.floor(Math.random() * 1000 * warpSpeed));
     }
   }, 1);
 }
@@ -494,6 +537,7 @@ function startGame() {
   startGeneratingBonus();
   runGame();
   incrementSpeed();
+  playBonusSound();
 }
 
 function startGeneratingBonus(){
@@ -511,8 +555,11 @@ function stopGame(){
   clearInterval(speedIncrease);
   clearInterval(introduceBonus);
   clearInterval(fallingDown);
+  clearInterval(playBonusSound);
   removeBonus();
   removeAllDebris();
+  warpTenHeading.classList.remove('warp10');
+  warpTenHeading.classList.add('invisible');
   gameIsRunning = false;
   if(areSoundsOn){
     sfx.setAttribute('src', 'sounds/movedown.wav');
@@ -599,7 +646,6 @@ function toggleMusic(){
   }
 }
 
-//NOTE: EXTRA - background music and sfx
 //NOTE: EXTRA - at warp 10, popup pulsing heading showing max warp factor reached
 //NOTE: EXTRA - add extra ships to choose from with added functionality
 // weapons - shoot projecticles to destroy debris
@@ -610,6 +656,7 @@ function toggleMusic(){
 // const arrayOfSpaceshipImgClasses = ['spacecraft1', 'spacecraft2', 'spacecraft3', 'spacecraft4'];
 //
 // const iconSpacecraft1 = document.createElement('img').setAttribute('src', 'images/spacecraft1.png');
+// splashMenu.appendChild(iconSpacecraft1).setAttribute('src', 'images/spacecraft1.png');
 // const spacecraft1 = {
 //   name: 'Wraith',
 //   hullIntegrity: 300,
@@ -617,7 +664,7 @@ function toggleMusic(){
 //   weapon: 'photonTorpedoes',
 //   icon: iconSpacecraft1
 // };
-// splashMenu.appendChild(iconSpacecraft1).setAttribute('src', 'images/spacecraft1.png');
+//
 // const spacecraft2 = {
 //   name: 'Blade',
 //   hullIntegrity: 200,

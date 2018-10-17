@@ -112,7 +112,7 @@ span.underline {
 section.top-info {
   margin: 0 auto;
   height: 5%;
-  width: 80%;
+  width: 90%;
   text-align: center;
   display: flex;
   justify-content: space-between;
@@ -145,7 +145,7 @@ h2 {
 }
 
 .top-info h1 {
-  font-size: 45px;
+  font-size: 43px;
   word-spacing: 5px;
   margin: -10px auto 0 auto;
   -webkit-text-stroke: 1px rgba(0, 9, 56, 1);
@@ -153,7 +153,7 @@ h2 {
 
 .top-info span {
   border: solid Mediumspringgreen 1px;
-  width: 250px;
+  width: 300px;
   font-size: 20px;
   text-decoration: underline;
   justify-content: center;
@@ -329,6 +329,24 @@ div.sound-controls i {
   margin-top: 5px;
   margin-right: 5px;
 }
+.laser {
+  background-image: url(images/photon-torpedo.png);
+  background-size: cover;
+}
+
+.grid h3 {
+  position: fixed;
+  left: 0%;
+  top: 90%;
+  width: 100%;
+  text-align: center;
+}
+.warp10 {
+  visibility: visible;
+}
+.invisible {
+  visibility: hidden;
+}
 
 #background-img {
   position: fixed;
@@ -336,4 +354,5 @@ div.sound-controls i {
   width: 200vw;
   bottom: 0;
   height: 170vh;
+  z-index: -1;
 }
