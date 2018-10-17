@@ -2,8 +2,13 @@
   font-family: 'Montalban-bold-italic';
   src: url('fonts/pixel-sagas_montalban/Montalban Bold Italic.otf');
 }
+
 i {
   -webkit-text-stroke: 1px rgba(0, 9, 56, 1);
+}
+
+h2 {
+  text-decoration: underline;
 }
 
 body {
@@ -23,7 +28,6 @@ main.container {
 }
 
 .grid {
-  /* background-color: red; */
   display: flex;
   flex-wrap: wrap;
   width: 260px;
@@ -33,19 +37,13 @@ main.container {
   margin: 0 auto;
   transform: perspective(95px) rotateX(15deg);
 }
+
 .grid-container {
   position: fixed;
   top: 0%;
   left: 0%;
   height: 97vh;
   width: 98vw;
-}
-
-@keyframes glow {
-  0%{border-width: 2px}
-  50%{border-width: 3px;
-    border-color: #00face }
-    100%{border-width: 2px}
 }
 
 .grid div.tilt-left {
@@ -60,10 +58,12 @@ main.container {
   border-top: solid Mediumspringgreen 2px;
   animation: glow 0.3s infinite;
 }
+
 .grid-border-bottom {
   border-bottom: solid Mediumspringgreen 2px;
   animation: glow 0.3s infinite;
 }
+
 .grid-border-left {
   border-left: solid Mediumspringgreen 2px;
   animation: glow 0.3s infinite;
@@ -92,20 +92,24 @@ main.container {
 .splash-leaders div {
   height: 75%;
   width: 80%;
-  /* min-width: 60%; */
   transform: perspective(35px) rotateX(-2deg);
   margin: 0 auto;
   margin-top: 30px;
+}
+
+.yellow {
+  color: yellow;
 }
 
 .splash-leaders li {
   text-align: left;
   color: yellow;
 }
+
 .splash-leaders li:first-of-type {
-  /* color: red; */
   animation: rainbow 3s infinite;
 }
+
 span.underline {
   text-decoration: underline;
 }
@@ -117,10 +121,6 @@ section.top-info {
   display: flex;
   justify-content: space-between;
   z-index: 10;
-}
-
-h2 {
-  text-decoration: underline;
 }
 
 .select-spacecraft1 {
@@ -138,10 +138,6 @@ h2 {
 .spacecraft-stats {
   width: 40%;
   text-align: left;
-}
-
-.yellow {
-  color: yellow;
 }
 
 .top-info h1 {
@@ -167,6 +163,7 @@ h2 {
   border: solid Mediumspringgreen 1px;
   font-size: 20px;
 }
+
 .splash-ship-select .previous-spacecraft, .splash-ship-select .next-spacecraft {
   width: 10%;
   height: 25%;
@@ -182,9 +179,6 @@ h2 {
   width: 25px;
   height: 20px;
   margin: 0;
-  /* border: solid Mediumspringgreen 0.5px; */
-  /* border-left: solid Mediumspringgreen 0.1px;
-  /* border-right: solid Mediumspringgreen 0.1px; */
 }
 
 div.spacecraft {
@@ -240,12 +234,9 @@ div.debris5 {
 }
 
 div.bonus {
-  background-image: url(images/ezgif.com-crop.gif);
-  /* border: solid white 0.5px; */
+  background-image: url(images/bonus-gif.gif);
   border-radius: 15px;
   background-size: cover;
-  /* animation: rainbow 2s infinite; */
-  /* animation-timing-function: linear; */
   transform: perspective(95px) rotateX(15deg);
 }
 
@@ -267,9 +258,7 @@ div.bonus {
   border-right: yellow 5px;
   border-style: double;
   width: 245px;
-  /* background-color: rgba(0, 9, 56, 1); */
 }
-
 
 .locked i, .locked:hover span {
   visibility:hidden;
@@ -291,26 +280,6 @@ div.bonus {
   transition: all 1s;
 }
 
-@keyframes pulse {
-  0%{opacity: 1}
-  50%{opacity: 0.5}
-  100%{opacity: 1}
-}
-
-@keyframes rainbow {
-  0%{color: #e81d1d}
-  10%{color: #e8b71d}
-  20%{color: #e3e81d}
-  30%{color: #e3e81d}
-  40%{color: #1de840}
-  50%{color: #1de840}
-  60%{color: #1ddde8}
-  70%{color: #2b1de8}
-  80%{color: #dd00f3}
-  90%{color: #dd00f3}
-  100%{color: #ff2400}
-}
-
 div.sound-controls {
   color: yellow;
   font-size: 20px;
@@ -329,6 +298,7 @@ div.sound-controls i {
   margin-top: 5px;
   margin-right: 5px;
 }
+
 .laser {
   background-image: url(images/photon-torpedo.png);
   background-size: cover;
@@ -341,11 +311,46 @@ div.sound-controls i {
   width: 100%;
   text-align: center;
 }
+
 .warp10 {
   visibility: visible;
 }
+
 .invisible {
   visibility: hidden;
+}
+
+@keyframes glow {
+  0% {
+    border-width: 2px
+  }
+  50% {
+    border-width: 3px;
+    border-color: #00face
+  }
+  100% {
+    border-width: 2px
+  }
+}
+
+@keyframes pulse {
+  0%{opacity: 1}
+  50%{opacity: 0.5}
+  100%{opacity: 1}
+}
+
+@keyframes rainbow {
+  0%{color: #e81d1d}
+  10%{color: #e8b71d}
+  20%{color: #e3e81d}
+  30%{color: #e3e81d}
+  40%{color: #1de840}
+  50%{color: #1de840}
+  60%{color: #1ddde8}
+  70%{color: #2b1de8}
+  80%{color: #dd00f3}
+  90%{color: #dd00f3}
+  100%{color: #ff2400}
 }
 
 #background-img {

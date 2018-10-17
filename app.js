@@ -138,14 +138,14 @@ window.addEventListener('keydown', function(e) {
         toggleElement(warpMeter);
         toggleElement(scoreCounter);
         if(areSoundsOn){
-          sfx.setAttribute('src', 'sounds/moveup.wav');
+          sfx.setAttribute('src', 'sounds/start-warp.wav');
           sfx.play();
         }
       }
     } else if (isSplashGrid && gameIsRunning) {
       //add shooting function here
       if(areSoundsOn){
-        sfx.setAttribute('src', 'sounds/Laser_Cannon-Mike_Koenig-797224747.mp3');
+        sfx.setAttribute('src', 'sounds/photon-torpedo.mp3');
         sfx.play();
       }
       setTimeout(function () {
@@ -337,7 +337,7 @@ function moveDown(){
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
     if(areSoundsOn){
-      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.setAttribute('src', 'sounds/move-spacecraft.mp3');
       sfx.play();
     }
   } else {
@@ -359,7 +359,7 @@ function moveLeft(){
       spacecraft.classList.remove('tilt-left');
     }, 300);
     if(areSoundsOn){
-      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.setAttribute('src', 'sounds/move-spacecraft.mp3');
       sfx.play();
     }
   } else {
@@ -381,7 +381,7 @@ function moveRight(){
       spacecraft.classList.remove('tilt-right');
     }, 300);
     if(areSoundsOn){
-      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.setAttribute('src', 'sounds/move-spacecraft.mp3');
       sfx.play();
     }
   } else {
@@ -399,7 +399,7 @@ function moveUp(){
     spacecraft = document.querySelectorAll('.grid div')[spacecraftPos];
     spacecraft.classList.add('spacecraft');
     if(areSoundsOn){
-      sfx.setAttribute('src', 'sounds/moveside.mp3');
+      sfx.setAttribute('src', 'sounds/move-spacecraft.mp3');
       sfx.play();
     }
   } else {
@@ -425,7 +425,7 @@ function playBonusSound(){
   const bonusSound = setInterval(function () {
     if(spacecraftPos === bonusPos){
       if(areSoundsOn){
-        const bonusSound1 = sfx.setAttribute('src', 'sounds/bonusgained1.mp3');
+        const bonusSound1 = sfx.setAttribute('src', 'sounds/bonus-acquired.mp3');
         sfx.play();
         clearInterval(bonusSound);
         bonusSound1.addEventListener('ended', function(){
@@ -501,7 +501,7 @@ function restartGame(){
   stopGame();
   startGame();
   if(areSoundsOn){
-    sfx.setAttribute('src', 'sounds/moveup.wav');
+    sfx.setAttribute('src', 'sounds/start-warp.wav');
     sfx.play();
   }
 }
@@ -567,7 +567,7 @@ function stopGame(){
   warpTenHeading.classList.add('invisible');
   gameIsRunning = false;
   if(areSoundsOn){
-    sfx.setAttribute('src', 'sounds/movedown.wav');
+    sfx.setAttribute('src', 'sounds/end-warp.wav');
     sfx.play();
   }
 }
