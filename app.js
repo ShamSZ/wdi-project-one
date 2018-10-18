@@ -188,7 +188,7 @@ window.addEventListener('keydown', function(e) {
     }
   }
 });
-//Fire testing
+//================Fire testing==========================
 let laserPos = spacecraftPos;
 let laser;
 let laserTrajectory;
@@ -216,7 +216,8 @@ function fire(){
 //     incrementScoreBy(10000);
 //   }
 // }, 1);
-//fire testing
+//================Fire testing==========================
+
 
 function addPlayerToHoF(playerName, score){
   class Player{
