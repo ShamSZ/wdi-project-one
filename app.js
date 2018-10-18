@@ -188,6 +188,7 @@ window.addEventListener('keydown', function(e) {
     }
   }
 });
+
 //================Fire testing==========================
 let laserPos = spacecraftPos;
 let laser;
@@ -237,7 +238,7 @@ function addPlayerToHoF(playerName, score){
 
   leaders.push(new Player(playerName, score));
   leaders.sort(compare);
-  leaders = leaders.slice(0,5);
+  leaders = leaders.slice(0,10);
   leaders.forEach(function(element){
     const newElement = document.createElement('li');
     newElement.textContent = `${element.highScore} >>> ${element.name}`;
@@ -658,6 +659,8 @@ function toggleMusic(){
 // hullIntegrity to survive impact with debris - bonus to restore hullIntegrity
 // NOTE: EXTRA - Player 2 - additional spacecraft
 // NOTE: EXTRA - Boss for joint/solo missions
+// NOTE: EXTRA - Authentication - store player & ship data with upgrades/achievements
+// NOTE: compare high scores globally
 
 // const arrayOfSpaceshipImgClasses = ['spacecraft1', 'spacecraft2', 'spacecraft3', 'spacecraft4'];
 //
