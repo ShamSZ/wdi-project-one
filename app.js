@@ -476,8 +476,8 @@ function runGame(){
       takeHighScore();
       stopGame();
     } else if (spacecraftPos === bonusPos){
-      bonus.classList.remove('bonus');
-      isBonusAvailable = false;
+      // bonus.classList.remove('bonus');
+      // isBonusAvailable = false;
       incrementScoreBy(Math.floor(Math.random() * 1000 * warpSpeed));
     }
   }, 1);
