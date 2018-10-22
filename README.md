@@ -35,6 +35,11 @@ Warp Factor is my first project from General Assembly's Web Development Immersiv
 ## Approach Taken
 
 ### Grid Layout & Generation of objects on screen
+
+I decided the simplest way to represent the grid would be as an array of divs, wrapped within a flex-box, with each 'object' having an assigned class. This would mean representing the movement of objects was straightforward using their indexes within the main array - for horizontal movement: +/- 1, and vertical movement: +/- 10(for a grid of width 10 boxes).
+
+For the debris, they would be generated at the top using Math.random to pick a random number between 0-9 for their position within the grid and using setInterval to 'move' them down at each interval, removing the debris class from the current position and adding it to the new position.
+
 ### Functionality
 #### Manoeuvring
 #### Keypresses
@@ -65,6 +70,9 @@ This piece of CSS gives the grid its distinctive perspective look; adding that t
 
 ## Wins and Blockers
 
+One of the problems I had initially, was the removal of  debris after it had left the grid; the console would return many errors stating it couldn't remove the class of undefined - I managed to get around this by limiting the movement of the debris only within the 10x20 grid.
+
+The biggest win, by far, was the amount of confidence I gained working with JavaScript during this project. I got the opportunity to apply my new learnings in a real-world project and achieved more than I had set out at the start.
 
 ## Future Content
 
