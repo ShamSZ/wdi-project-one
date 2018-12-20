@@ -7,7 +7,7 @@
 
 Warp Factor is an entertaining browser-based arcade style game. Challenge your reaction skills by avoiding the obstacles as you travel at Warp Factor speeds through space and accumulate bonus points to make into the Hall of Fame.
 
-Warp Factor is my first project from General Assembly's Web Development Immersive. It was an individual project built in a week, and was both the first proper game I had built, and my first real-world type practice with JavaScript.
+This was my first project from General Assembly's Web Development Immersive Course. It was an individual project built in a week, and was both the first proper game I had built, and my first real-world type practice with JavaScript.
 
 ![Gameplay demo](/images/readme-screenshots/warp-factor-demo.gif)
 
