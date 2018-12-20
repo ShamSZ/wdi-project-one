@@ -132,7 +132,7 @@ function addPlayerToHoF(playerName, score){
 ### After some styling
 
 ![After styling 1](/images/readme-screenshots/style1.png)
-![After styling 1](/images/readme-screenshots/style2.png)
+![After styling 2](/images/readme-screenshots/style2.png)
 
 ### Featured Piece of Code no. 2
 
