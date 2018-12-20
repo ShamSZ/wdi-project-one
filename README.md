@@ -9,10 +9,22 @@ Warp Factor is an entertaining browser-based arcade style game. Challenge your r
 
 Warp Factor is my first project from General Assembly's Web Development Immersive. It was an individual project built in a week, and was both the first proper game I had built, and my first real-world type practice with JavaScript.
 
-<img src="/images/warp-factor-demo.gif" width="500">
+![Gameplay demo](/images/readme-screenshots/warp-factor-demo.gif)
 
-## Screenshots of all screens
+## Screenshots
+![Landing page](/images/readme-screenshots/home.png)
 
+![Briefing page](/images/readme-screenshots/briefing.png)
+
+![Game mode select page](/images/readme-screenshots/gamemode.png)
+
+![Ship select page](/images/readme-screenshots/shipselect.png)
+
+![Gameplay screenshot](/images/readme-screenshots/gameplay.png)
+
+![Pause menu screenshot](/images/readme-screenshots/pausemenu.png)
+
+![Scoreboard screenshot](/images/readme-screenshots/score.png)
 
 ## Brief
 
