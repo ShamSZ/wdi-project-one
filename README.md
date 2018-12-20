@@ -127,11 +127,13 @@ function addPlayerToHoF(playerName, score){
 ```
 ### Gameplay at MVP
 
-screenshot
+![MVP Gameplay](/images/readme-screenshots/mvp.png)
 
 ### After some styling
 
-screenshot
+![After styling 1](/images/readme-screenshots/style1.png)
+![After styling 1](/images/readme-screenshots/style2.png)
+
 ### Featured Piece of Code no. 2
 
 This piece of CSS gives the grid its distinctive perspective look; adding that to the background this immerses the player into the feeling of warp-travel. From `/style.css`.
