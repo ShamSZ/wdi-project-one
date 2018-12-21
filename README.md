@@ -1,30 +1,14 @@
-# General Assembly WDI Project 1: Warp Factor
+# **Project 1: Warp Factor** ![General Assembly](https://camo.githubusercontent.com/6ce15b81c1f06d716d753a61f5db22375fa684da/68747470733a2f2f67612d646173682e73332e616d617a6f6e6177732e636f6d2f70726f64756374696f6e2f6173736574732f6c6f676f2d39663838616536633963333837313639306533333238306663663535376633332e706e67)
 
 
-[GitHub Pages](https://shamsz.github.io/wdi-project-one/).
-
-[GitHub Repo](https://github.com/ShamSZ/wdi-project-one).
-
+## Overview
 Warp Factor is an entertaining browser-based arcade style game. Challenge your reaction skills by avoiding the obstacles as you travel at Warp Factor speeds through space and accumulate bonus points to make into the Hall of Fame.
 
 This was my first project from General Assembly's Web Development Immersive Course. It was an individual project built in a week, and was both the first proper game I had built, and my first real-world type practice with JavaScript.
 
+Launch on [GitHub Pages](https://shamsz.github.io/wdi-project-one/). Check out the GitHub [Repo](https://github.com/ShamSZ/wdi-project-one).
+
 ![Gameplay demo](/images/readme-screenshots/warp-factor-demo.gif)
-
-## Screenshots
-![Landing page](/images/readme-screenshots/home.png)
-
-![Briefing page](/images/readme-screenshots/briefing.png)
-
-![Game mode select page](/images/readme-screenshots/gamemode.png)
-
-![Ship select page](/images/readme-screenshots/shipselect.png)
-
-![Gameplay screenshot](/images/readme-screenshots/gameplay.png)
-
-![Pause menu screenshot](/images/readme-screenshots/pausemenu.png)
-
-![Scoreboard screenshot](/images/readme-screenshots/score.png)
 
 ## Brief
 
@@ -82,7 +66,7 @@ window.addEventListener('keydown', function(e) {
 });
 ```
 
-### Audio
+#### Audio
 In my previous projects, I had a lot of fun working with Audio, so I added a background track and sound effects for all button clicks/presses. As a bonus, I thought it would be good UX to enable toggling music and sounds, so I added these to the game pause menu and global clickable links at the top-right of the screen.
 ``` JavaScript
 //enable all sounds
@@ -95,7 +79,7 @@ if(areSoundsOn){
 }
 ```
 
-### Featured Piece of Code no. 1
+#### Featured Piece of Code no. 1
 
 This function is called upon after the user has crashed the spacecraft, to create an object with their name and score; this is then pushed into an array that is sorted by highest scores, top 10 objects are selected and populated as `li` DOM objects in the Hall of Fame.
 ``` JavaScript
@@ -125,16 +109,8 @@ function addPlayerToHoF(playerName, score){
   });
 }
 ```
-### Gameplay at MVP
 
-![MVP Gameplay](/images/readme-screenshots/mvp.png)
-
-### After some styling
-
-![After styling 1](/images/readme-screenshots/style1.png)
-![After styling 2](/images/readme-screenshots/style2.png)
-
-### Featured Piece of Code no. 2
+#### Featured Piece of Code no. 2
 
 This piece of CSS gives the grid its distinctive perspective look; adding that to the background this immerses the player into the feeling of warp-travel. From `/style.css`.
 ``` CSS
@@ -142,6 +118,32 @@ This piece of CSS gives the grid its distinctive perspective look; adding that t
   transform: perspective(5px) rotateX(1deg);
 }
 ```
+
+## Screenshots
+
+**Gameplay at MVP**
+
+![MVP Gameplay](/images/readme-screenshots/mvp.png)
+
+**After some styling**
+
+![After styling 1](/images/readme-screenshots/style1.png)
+![After styling 2](/images/readme-screenshots/style2.png)
+
+### Final Product
+![Landing page](/images/readme-screenshots/home.png)
+
+![Briefing page](/images/readme-screenshots/briefing.png)
+
+![Game mode select page](/images/readme-screenshots/gamemode.png)
+
+![Ship select page](/images/readme-screenshots/shipselect.png)
+
+![Gameplay screenshot](/images/readme-screenshots/gameplay.png)
+
+![Pause menu screenshot](/images/readme-screenshots/pausemenu.png)
+
+![Scoreboard screenshot](/images/readme-screenshots/score.png)
 
 ## Bugs
 Below is a list of some of the known bugs within the game:
